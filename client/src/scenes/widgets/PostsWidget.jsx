@@ -36,7 +36,7 @@ const PostsWidget = ({ userId, isProfile = false }) => {
             getPosts();
         }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
+    // to do - only group posts
     const sortedPosts = [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     return (

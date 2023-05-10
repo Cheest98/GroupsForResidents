@@ -12,9 +12,11 @@ import {
 } from "@mui/material";
 import {
     Search,
+    PlaylistAddCheck,
+    ReceiptLong,
     DarkMode,
     LightMode,
-    Help,
+    CalendarMonth,
     Menu,
     Close,
 } from "@mui/icons-material";
@@ -56,24 +58,13 @@ const Navbar = () => {
                 >
                     GFR
                 </Typography>
-                {isNonMobileScreens && (
-                    <FlexBetween
-                        backgroundColor={neutralLight}
-                        borderRadius="9px"
-                        gap="3rem"
-                        padding="0.1rem 1.5rem"
-                    >
-                        <InputBase placeholder="Search..." />
-                        <IconButton>
-                            <Search />
-                        </IconButton>
-                    </FlexBetween>
-                )}
             </FlexBetween>
-
             {/* DESKTOP NAV */}
             {isNonMobileScreens ? (
                 <FlexBetween gap="2rem">
+                    <ReceiptLong sx={{ fontSize: "25px" }} />
+                    <PlaylistAddCheck sx={{ fontSize: "25px" }} />
+                    <CalendarMonth sx={{ fontSize: "25px" }} />
                     <IconButton onClick={() => dispatch(setMode())}>
                         {theme.palette.mode === "dark" ? (
                             <DarkMode sx={{ fontSize: "25px" }} />
@@ -101,10 +92,11 @@ const Navbar = () => {
                                 },
                             }}
                             input={<InputBase />}
-                        >
+                        > {/* To fix  -first item cannot be doubled */}
                             <MenuItem value={fullName}>
-                                <Typography>{fullName}</Typography>
+                                {fullName}
                             </MenuItem>
+                            <MenuItem onClick={() => navigate(`/profile/${user._id}`)}> Profile </MenuItem>
                             <MenuItem onClick={() => dispatch(setLogout())}>Log Out</MenuItem>
                         </Select>
                     </FormControl>
@@ -178,7 +170,7 @@ const Navbar = () => {
                                 input={<InputBase />}
                             >
                                 <MenuItem value={fullName}>
-                                    <Typography>{fullName}</Typography>
+                                    <Typography onClick={() => navigate(`/profile/${user._id}`)}>{fullName}</Typography>
                                 </MenuItem>
                                 <MenuItem onClick={() => dispatch(setLogout())}>
                                     Log Out
