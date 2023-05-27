@@ -62,9 +62,24 @@ const Navbar = () => {
             {/* DESKTOP NAV */}
             {isNonMobileScreens ? (
                 <FlexBetween gap="2rem">
-                    <ReceiptLong sx={{ fontSize: "25px" }} />
-                    <PlaylistAddCheck sx={{ fontSize: "25px" }} />
-                    <CalendarMonth sx={{ fontSize: "25px" }} />
+                    <ReceiptLong sx={{
+                        fontSize: "25px", "&:hover": {
+                            color: neutralLight,
+                            cursor: "pointer",
+                        },
+                    }} />
+                    <PlaylistAddCheck onClick={() => navigate(`/tasks`)} sx={{
+                        fontSize: "25px", "&:hover": {
+                            color: neutralLight,
+                            cursor: "pointer",
+                        },
+                    }} />
+                    <CalendarMonth sx={{
+                        fontSize: "25px", "&:hover": {
+                            color: neutralLight,
+                            cursor: "pointer",
+                        },
+                    }} />
                     <IconButton onClick={() => dispatch(setMode())}>
                         {theme.palette.mode === "dark" ? (
                             <DarkMode sx={{ fontSize: "25px" }} />
@@ -72,9 +87,6 @@ const Navbar = () => {
                             <LightMode sx={{ color: dark, fontSize: "25px" }} />
                         )}
                     </IconButton>
-                    {/*                     <Message sx={{ fontSize: "25px" }} />
-                    <Notifications sx={{ fontSize: "25px" }} />
-                        <Help sx={{ fontSize: "25px" }} /> */}
                     <FormControl variant="standard" value={fullName}>
                         <Select
                             value={fullName}
@@ -137,21 +149,7 @@ const Navbar = () => {
                         justifyContent="center"
                         alignItems="center"
                         gap="3rem"
-                    >
-                        <IconButton
-                            onClick={() => dispatch(setMode())}
-                            sx={{ fontSize: "25px" }}
-                        >
-                            {theme.palette.mode === "dark" ? (
-                                <DarkMode sx={{ fontSize: "25px" }} />
-                            ) : (
-                                <LightMode sx={{ color: dark, fontSize: "25px" }} />
-                            )}
-                        </IconButton>
-                        {/*                         <Message sx={{ fontSize: "25px" }} />
-                        <Notifications sx={{ fontSize: "25px" }} />
-                        <Help sx={{ fontSize: "25px" }} /> */}
-                        <FormControl variant="standard" value={fullName}>
+                    ><FormControl variant="standard" value={fullName}>
                             <Select
                                 value={fullName}
                                 sx={{
@@ -177,6 +175,23 @@ const Navbar = () => {
                                 </MenuItem>
                             </Select>
                         </FormControl>
+                        <ReceiptLong sx={{ fontSize: "25px" }} />
+                        <PlaylistAddCheck onClick={() => navigate(`/tasks`)} sx={{ fontSize: "25px" }} />
+                        <CalendarMonth sx={{ fontSize: "25px" }} />
+                        <IconButton
+                            onClick={() => dispatch(setMode())}
+                            sx={{ fontSize: "25px" }}
+                        >
+                            {theme.palette.mode === "dark" ? (
+                                <DarkMode sx={{ fontSize: "25px" }} />
+                            ) : (
+                                <LightMode sx={{ color: dark, fontSize: "25px" }} />
+                            )}
+                        </IconButton>
+                        {/*                         <Message sx={{ fontSize: "25px" }} />
+                        <Notifications sx={{ fontSize: "25px" }} />
+                        <Help sx={{ fontSize: "25px" }} /> */}
+
                     </FlexBetween>
                 </Box>
             )}

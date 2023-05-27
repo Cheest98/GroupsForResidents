@@ -18,8 +18,7 @@ import {
     useMediaQuery,
 } from "@mui/material";
 import FlexBetween from "../../components/FlexBetween";
-import Dropzone from "react-dropzone";
-import UserImage from "../../components/UserImage";
+import FlexAround from "../../components/FlexAround"
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,6 +37,7 @@ const MyTaskWidget = () => {
     const handleTask = async () => {
         const formData = new FormData();
         formData.append("userId", _id);
+        formData.append("title", task);
         formData.append("description", task);
 
         const response = await fetch(`http://localhost:3001/tasks`, {
@@ -51,10 +51,10 @@ const MyTaskWidget = () => {
     };
 
     return (
-        <WidgetWrapper>
+        <WidgetWrapper >
             <FlexBetween gap="1.5rem">
                 <InputBase
-                    placeholder="What's on your mind..."
+                    placeholder="Task"
                     onChange={(e) => setTask(e.target.value)}
                     value={task}
                     sx={{
