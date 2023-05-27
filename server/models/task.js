@@ -6,6 +6,7 @@ const taskSchema = new mongoose.Schema({
   userLastName: { type: String },
   title:{ type: String},
   description: { type: String },
+  status:{ type: String, enum: ['todo', 'doing', 'done'], default: 'todo' },
   group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' },
 }, { timestamps: true });
 

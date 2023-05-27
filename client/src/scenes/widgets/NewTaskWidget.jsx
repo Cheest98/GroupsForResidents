@@ -26,7 +26,7 @@ import { setTasks } from "../../state";
 
 const MyTaskWidget = () => {
     const dispatch = useDispatch();
-    const [task, setTask] = useState("");
+    const [task, setTask] = useState({ title: '', description: '' });
     const { palette } = useTheme();
     const { _id } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
@@ -37,8 +37,8 @@ const MyTaskWidget = () => {
     const handleTask = async () => {
         const formData = new FormData();
         formData.append("userId", _id);
-        formData.append("title", task);
-        formData.append("description", task);
+        formData.append("title", task.title);
+        formData.append("description", task.description);
 
         const response = await fetch(`http://localhost:3001/tasks`, {
             method: "POST",
@@ -47,16 +47,35 @@ const MyTaskWidget = () => {
         });
         const tasks = await response.json();
         dispatch(setTasks({ tasks }));
-        setTask("");
+        setTask({ title: '', description: '' }); // Resetuj wartości title i description
+    };
+
+    const handleTitleChange = (e) => {
+        setTask({ ...task, title: e.target.value });
+    };
+
+    const handleDescriptionChange = (e) => {
+        setTask({ ...task, description: e.target.value });
     };
 
     return (
-        <WidgetWrapper >
+        <WidgetWrapper>
             <FlexBetween gap="1.5rem">
                 <InputBase
-                    placeholder="Task"
-                    onChange={(e) => setTask(e.target.value)}
-                    value={task}
+                    placeholder="Title"
+                    onChange={handleTitleChange}
+                    value={task.title}
+                    sx={{
+                        width: "100%",
+                        backgroundColor: palette.neutral.light,
+                        borderRadius: "2rem",
+                        padding: "1rem 2rem",
+                    }}
+                />
+                <InputBase
+                    placeholder="Description"
+                    onChange={handleDescriptionChange}
+                    value={task.description}
                     sx={{
                         width: "100%",
                         backgroundColor: palette.neutral.light,
@@ -69,9 +88,8 @@ const MyTaskWidget = () => {
             <Divider sx={{ margin: "1.25rem 0" }} />
 
             <FlexBetween>
-
                 <Button
-                    disabled={!task}
+                    disabled={!task.title || !task.description} // Sprawdzaj oba pola
                     onClick={handleTask}
                     sx={{
                         color: palette.background.alt,

@@ -4,13 +4,15 @@ import User from "../models/user.js";
 /* CREATE */
 export const createTask = async (req, res) => {
   try {
-    const { userId, description, picturePath } = req.body;
+    const { userId, title, description, status } = req.body;
     const user = await User.findById(userId);
     const newTask = new Task({
-      userId,
+      user: userId,
       userFirstName: user.firstName,
       userLastName: user.lastName,
+      title,
       description,
+      status,
       group: user.group
     });
     await newTask.save();
@@ -21,6 +23,9 @@ export const createTask = async (req, res) => {
     res.status(409).json({ message: err.message });
   }
 };
+
+/* UPDATE */
+
 
 /* READ */
 export const getFeedTasks = async (req, res) => {
