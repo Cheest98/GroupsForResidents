@@ -25,7 +25,26 @@ export const createTask = async (req, res) => {
 };
 
 /* UPDATE */
+export const updateTaskStatus = async (req, res) => {
+  try {
+    const { taskId } = req.params;
+    const { status } = req.body;
 
+    // Sprawdź, czy zadanie istnieje
+    const task = await Task.findById(taskId);
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    // Aktualizuj status zadania
+    task.status = status;
+    await task.save();
+
+    res.status(200).json({ message: "Task status updated", task });
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
 /* READ */
 export const getFeedTasks = async (req, res) => {
@@ -44,5 +63,20 @@ export const getUserTasks = async (req, res) => {
     res.status(200).json(post);
   } catch (err) {
     res.status(404).json({ message: err.message });
+  }
+};
+
+/* DELETE */
+
+export const deleteTask = async (req, res) => {
+  try {
+    const { taskId } = req.params; // Poprawne destrukturyzowanie taskId
+    const task = await Task.findByIdAndDelete(taskId);
+    if (!task) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+    res.json({ message: "Task deleted" });
+  } catch (error) {
+    res.status(500).json({ error: "Server error" });
   }
 };

@@ -1,17 +1,17 @@
-import React from 'react'
-import TaskItem from './taskItem'
+import React from 'react';
+import TaskItem from './taskItem';
 import WidgetWrapper from '../WidgetWrapper';
-import { Box, useMediaQuery, Grid } from '@mui/material';
-import TaskWrapper from '../tasksComponents/TaskWrapper'
+import { Box } from '@mui/material';
 
-const TaskRow = ({ tasks, status }) => {
+const TaskRow = ({ tasks, status, deleteTask, updateTaskStatus }) => {
     return (
         <WidgetWrapper>
             <h2>{status}</h2>
-            <Box >
+            <Box>
                 {tasks.map((task) => (
-                    <TaskItem key={task.id} task={task} />
-                ))}</Box>
+                    <TaskItem key={task.id} task={task} deleteTask={deleteTask} updateTaskStatus={updateTaskStatus} />
+                ))}
+            </Box>
         </WidgetWrapper>
     );
 };

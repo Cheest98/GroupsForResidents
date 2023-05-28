@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setTasks } from "../../state";
 import TaskList from "../../components/tasksComponents/taskList";
-import WidgetWrapper from "../../components/WidgetWrapper";
 
 const TasksWidget = ({ userId, isProfile }) => {
     const dispatch = useDispatch();
@@ -17,6 +16,34 @@ const TasksWidget = ({ userId, isProfile }) => {
         });
         const data = await response.json();
         dispatch(setTasks({ tasks: data }));
+    };
+
+    const deleteTask = async (taskId) => {
+        const response = await fetch(`http://localhost:3001/tasks/${taskId}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.ok) {
+            const updatedTasks = tasks.filter((task) => task._id !== taskId);
+            dispatch(setTasks({ tasks: updatedTasks }));
+        }
+    };
+
+    const updateTaskStatus = async (taskId, newStatus) => {
+        const response = await fetch(`http://localhost:3001/tasks/${taskId}/status`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ status: newStatus }),
+        });
+        if (response.ok) {
+            const updatedTasks = tasks.map((task) => {
+                if (task._id === taskId) {
+                    return { ...task, status: newStatus };
+                }
+                return task;
+            });
+            dispatch(setTasks({ tasks: updatedTasks }));
+        }
     };
 
     const getUserTasks = async () => {
@@ -44,7 +71,7 @@ const TasksWidget = ({ userId, isProfile }) => {
 
     return (
 
-        <TaskList tasks={sortedtasks} />
+        <TaskList tasks={sortedtasks} deleteTask={deleteTask} updateTaskStatus={updateTaskStatus} />
     );
 };
 
