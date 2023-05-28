@@ -2,11 +2,11 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "../../state";
 import PostWidget from "../widgets/PostWidget";
+
 const PostsWidget = ({ userId, isProfile = false }) => {
     const dispatch = useDispatch();
     const posts = useSelector((state) => state.posts);
     const token = useSelector((state) => state.token);
-    const user = useSelector((state) => state.user);
 
     const getPosts = async () => {
         const response = await fetch("http://localhost:3001/posts", {
@@ -37,26 +37,23 @@ const PostsWidget = ({ userId, isProfile = false }) => {
         }
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // to raczej do optymalizacji
-    const sortedPosts = [...posts].filter((post) => post.group === user.group).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    const sortedPosts = Array.isArray(posts)
+        ? [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        : [];
 
     return (
         <>
-            {sortedPosts.map(
-                ({
-                    _id, user, userFirstName, userLastName, description, picturePath, userPicturePath
-                }) => (
-                    <PostWidget
-                        key={_id}
-                        postId={_id}
-                        postUserId={user}
-                        name={`${userFirstName} ${userLastName}`}
-                        description={description}
-                        picturePath={picturePath}
-                        userPicturePath={userPicturePath}
-                    />
-                )
-            )}
+            {sortedPosts.map(({ _id, user, userFirstName, userLastName, description, picturePath, userPicturePath }) => (
+                <PostWidget
+                    key={_id}
+                    postId={_id}
+                    postUserId={user}
+                    name={`${userFirstName} ${userLastName}`}
+                    description={description}
+                    picturePath={picturePath}
+                    userPicturePath={userPicturePath}
+                />
+            ))}
         </>
     );
 };

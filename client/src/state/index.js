@@ -34,11 +34,13 @@ export const authSlice = createSlice({
       state.posts = updatedPosts;
     },
     setTasks: (state, action) => {
-      state.tasks = action.payload.tasks;
+      state.tasks = action.payload.tasks || [];
     },
     setTask: (state, action) => {
-      const updatedTasks= state.tasks.map((task) => {
-        if (task._id === action.payload.task._id) return action.payload.task;
+      const updatedTasks = state.tasks.map((task) => {
+        if (task._id === action.payload.task._id) {
+          return action.payload.task;
+        }
         return task;
       });
       state.tasks = updatedTasks;
@@ -46,6 +48,14 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setMode, setLogin, setLogout, setFriends, setPosts, setPost, setTasks, setTask } =
-  authSlice.actions;
+export const {
+  setMode,
+  setLogin,
+  setLogout,
+  setPosts,
+  setPost,
+  setTasks,
+  setTask,
+} = authSlice.actions;
+
 export default authSlice.reducer;
