@@ -11,21 +11,30 @@ const AuthorWidget = ({ userId }) => {
 
     useEffect(() => {
         const fetchAuthorData = async () => {
-            const response = await fetch(`http://localhost:3001/users/${userId}`, {
-                headers: { Authorization: `Bearer ${token}` },
-            });
-            const data = await response.json();
-            setAuthorData(data);
+            try {
+                const response = await fetch(`http://localhost:3001/users/${userId}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                if (!response.ok) {
+                    throw new Error("Nie udało się pobrać danych autora.");
+                }
+
+                const data = await response.json();
+                setAuthorData(data.user);
+            } catch (error) {
+                console.error(error);
+            }
         };
+
         fetchAuthorData();
     }, [userId, token]);
 
     if (!authorData) {
-        return null; // Jeśli dane nie zostały jeszcze pobrane, to nie wyświetlamy nic
+        return null;
     }
 
-    const { firstName, lastName, picturePath
-    } = authorData;
+    const { firstName, lastName, picturePath } = authorData;
 
     return (
         <Box display="flex" alignItems="center">

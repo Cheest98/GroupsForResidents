@@ -5,7 +5,6 @@ import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import FlexAround from "../../components/FlexAround";
 
 const UserWidget = ({ userId, picturePath }) => {
@@ -34,12 +33,7 @@ const UserWidget = ({ userId, picturePath }) => {
     if (!user) {
         return null;
     }
-    const {
-        firstName,
-        lastName,
-        email,
-        group,
-    } = user;
+
 
     // To fix
     // Phone view
@@ -47,16 +41,16 @@ const UserWidget = ({ userId, picturePath }) => {
     return (
         <WidgetWrapper m="2rem 0" width="120%">
             <FlexBetween gap="1rem" m="1rem 0">
-                <UserImage image={picturePath} />
+                <UserImage image={user.user.picturePath} />
                 <Box>
                     <Typography
                         variant="h3"
                         color={dark}
                         fontWeight="300"
                     >
-                        {firstName} {lastName}
+                        {user.user.firstName} {user.user.lastname}
                     </Typography>
-                    <Typography color={medium}>Group</Typography>
+                    <Typography color={medium}>{user.group.name}</Typography>
                 </Box>
                 {/* Do poprawy na wersji mobilnej */}
                 <EditOutlined sx={{ color: main }} />
@@ -79,7 +73,7 @@ const UserWidget = ({ userId, picturePath }) => {
                                 <Typography color={main} fontWeight="500" align="left">
                                     Email
                                 </Typography>
-                                <Typography color={medium}>{email}</Typography>
+                                <Typography color={medium}>{user.user.email}</Typography>
                             </Box>
                         </FlexBetween>
                     </FlexAround>
