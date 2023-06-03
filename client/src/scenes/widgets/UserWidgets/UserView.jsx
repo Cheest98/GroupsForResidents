@@ -22,7 +22,7 @@ const UserView = ({ user, picturePath, handleEditClick }) => {
                         color={dark}
                         fontWeight="300"
                     >
-                        {user.firstName} {user.lastname}
+                        {user.firstName} {user.lastName}
                     </Typography>
                     <Typography color={medium}>{user.group.name}</Typography>
                 </Box>

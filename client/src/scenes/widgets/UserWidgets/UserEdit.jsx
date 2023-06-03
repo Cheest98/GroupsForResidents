@@ -1,36 +1,87 @@
-import React from "react";
-import { Box, Typography, useTheme, Divider, useMediaQuery } from "@mui/material";
+import { useState, React } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Box, Typography, useTheme, Divider, useMediaQuery, TextField } from "@mui/material";
 import { LocalPhone, MailOutline, Cancel, CheckCircle } from "@mui/icons-material";
 import UserImage from "../../../components/UserImage";
 import FlexBetween from "../../../components/FlexBetween";
 import WidgetWrapper from "../../../components/WidgetWrapper";
 import FlexAround from "../../../components/FlexAround";
+import { setUser } from "../../../state";
 
-const UserEdit = ({ user, picturePath, handleCancelClick }) => {
+const UserEdit = ({ user, picturePath, handleCancelClick, getUser }) => {
     const { palette } = useTheme();
+    const dispatch = useDispatch();
     const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
+    const token = useSelector((state) => state.token);
     const isNonMobile = useMediaQuery("(min-width:600px)");
+    const { firstName, lastName, group } = user;
+    const [formData, setFormData] = useState({
+        // Stan formularza edycji
+        firstName,
+        lastName,
+    });
+
+    const handleFormChange = (e) => {
+        const { name, value } = e.target;
+        if (name !== "picturePath") {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                [name]: value,
+            }));
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        // Wywołanie API lub inna logika zapisu zmian
+        try {
+            const response = await fetch(`http://localhost:3001/users/${user._id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json", Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify(formData),
+            });
+            if (response.ok) {
+                // Zapis zmian powiódł się
+                // Wykonaj odpowiednie akcje po zapisie (np. wyświetl powiadomienie, odśwież dane, itp.)
+                console.log("Zapisano zmiany");
+
+                await getUser();
+                dispatch(setUser({ user: formData }));
+                handleCancelClick();
+            } else {
+                // Zapis zmian nie powiódł się
+                // Wyświetl odpowiedni komunikat lub wykonaj inne działania
+                console.error("Błąd podczas zapisu zmian");
+            }
+        } catch (error) {
+            // Obsłuż błąd związany z zapisem zmian
+            console.error("Błąd podczas zapisu zmian", error);
+            console.log(user);
+        }
+    };
     return (
         <WidgetWrapper m="2rem 0" width="100%">
             <Typography color={medium}>Widok Edycji</Typography>
             <FlexBetween gap="1rem" m="1rem 0">
                 <UserImage image={user.picturePath} />
                 <Box>
-                    <Typography
-                        variant="h3"
-                        color={dark}
-                        fontWeight="300"
-                    >
-                        {user.firstName} {user.lastName}
-                    </Typography>
-                    <Typography color={medium}>{user.group.name}</Typography>
+                    <TextField
+                        label="FirstName"
+                        value={formData.firstName}
+                        onChange={handleFormChange}
+                        onSubmit={handleSubmit}
+                        name="firstName"
+                        sx={{ gridColumn: "span 4" }}
+                    />
                 </Box>
                 {/* Do poprawy na wersji mobilnej */}
                 <Box>
                     <Cancel sx={{ color: main }} onClick={handleCancelClick} />
-                    <CheckCircle sx={{ color: main }} />
+                    <CheckCircle sx={{ color: main }} onClick={handleSubmit} />
                 </Box>
             </FlexBetween>
             <Divider />

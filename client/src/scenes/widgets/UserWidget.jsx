@@ -7,7 +7,7 @@ import UserEdit from "../widgets/UserWidgets/UserEdit";
 
 const UserWidget = ({ userId, picturePath }) => {
     const [user, setUser] = useState(null);
-    const [editing, setEditing] = useState(true);
+    const [editing, setEditing] = useState(false);
     const { palette } = useTheme();
     const token = useSelector((state) => state.token);
     const dark = palette.neutral.dark;
@@ -43,7 +43,7 @@ const UserWidget = ({ userId, picturePath }) => {
 
 
     if (editing) {
-        return <UserEdit user={user.user} picturePath={user.picturePath} handleCancelClick={handleCancelClick} />;
+        return <UserEdit user={user.user} picturePath={user.picturePath} handleCancelClick={handleCancelClick} getUser={getUser} />;
     }
 
     return (
