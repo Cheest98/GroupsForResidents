@@ -77,6 +77,15 @@ const UserEdit = ({ user, picturePath, handleCancelClick, getUser }) => {
                         name="firstName"
                         sx={{ gridColumn: "span 4" }}
                     />
+                    <TextField
+                        label="LastName"
+                        value={formData.lastName}
+                        onChange={handleFormChange}
+                        onSubmit={handleSubmit}
+                        name="lastName"
+                        sx={{ gridColumn: "span 4" }}
+                    />
+
                 </Box>
                 {/* Do poprawy na wersji mobilnej */}
                 <Box>

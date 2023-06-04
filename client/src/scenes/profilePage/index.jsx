@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Navbar from "../../scenes/navbar";
 import UserWidget from "../widgets/UserWidget";
+import GroupView from "../widgets/GroupWidgets/GroupView"
+
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
     const { userId } = useParams();
@@ -22,7 +24,7 @@ const ProfilePage = () => {
     useEffect(() => {
         getUser();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
+    //console.log(user.group)
     if (!user) return null;
     return (
         <Box>
@@ -40,6 +42,7 @@ const ProfilePage = () => {
                 <Box width="100%"
                     p="1rem 20%"
                 ><UserWidget userId={userId} picturePath={user.picturePath} />
+                    <GroupView group={user.group} />
                 </Box>
             </Box>
         </Box>)

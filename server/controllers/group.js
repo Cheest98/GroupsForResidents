@@ -38,9 +38,19 @@ export const addUserToGroup = async (req, res) => {
     }
 };
 
+/* READ */
+export const getAllGroups = async (req, res) => {
+  try {
+    const group = await Group.find()
+    res.status(200).json(group);
+  } catch (err) {
+    res.status(404).json({ message: err.message });
+  }
+};
+
 export const addUserToGlobalGroup = async (userId) => {
     try {
-      const selectedGroup = await Group.findById('643db2e5ed80753e9ab0b321');
+      const selectedGroup = await Group.findById('643db2e5ed80753e9ab0b322');
       const currentUser = await User.findById(userId);
   
       if (!selectedGroup) {

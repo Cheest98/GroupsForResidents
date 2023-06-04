@@ -49,7 +49,7 @@ app.post("/tasks",verifyToken, upload.single("picture"), createTask)
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes )
-app.use("/group", groupRoutes )
+app.use("/groups", groupRoutes )
 app.use("/posts", postRoutes )
 app.use("/tasks", taskRoutes )
 /* MONGOOSE  SETUP*/

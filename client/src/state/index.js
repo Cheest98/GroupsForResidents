@@ -7,6 +7,7 @@ const initialState = {
   token: null,
   posts: [],
   tasks: [],
+  groups:[]
 };
 
 export const authSlice = createSlice({
@@ -29,6 +30,9 @@ export const authSlice = createSlice({
     },
     setPosts: (state, action) => {
       state.posts = action.payload.posts;
+    },
+    setGroups: (state, action) => {
+      state.groups = action.payload.groups;
     },
     setPost: (state, action) => {
       const updatedPosts = state.posts.map((post) => {
@@ -54,6 +58,7 @@ export const authSlice = createSlice({
 
 export const {
   setUser,
+  setGroups,
   setMode,
   setLogin,
   setLogout,
