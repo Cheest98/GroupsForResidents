@@ -7,6 +7,7 @@ import UserEdit from "../widgets/UserWidgets/UserEdit";
 
 const UserWidget = ({ userId, picturePath }) => {
     const [user, setUser] = useState(null);
+    const { group } = useSelector((state) => state.user);
     const [editing, setEditing] = useState(false);
     const { palette } = useTheme();
     const token = useSelector((state) => state.token);
@@ -27,7 +28,7 @@ const UserWidget = ({ userId, picturePath }) => {
 
     useEffect(() => {
         getUser();
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [group]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // to się pewnie da w jednego handlera - do sprwadzenia w przyszlosci
     const handleCancelClick = () => {

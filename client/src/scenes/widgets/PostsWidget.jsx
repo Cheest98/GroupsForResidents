@@ -7,12 +7,16 @@ const PostsWidget = ({ userId, isProfile = false }) => {
     const dispatch = useDispatch();
     const posts = useSelector((state) => state.posts);
     const token = useSelector((state) => state.token);
+    const user = useSelector((state) => state.user);
 
-    const getPosts = async () => {
-        const response = await fetch("http://localhost:3001/posts", {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-        });
+    const getGroupPosts = async () => {
+        const response = await fetch(
+            `http://localhost:3001/posts/group/${user.group}`,
+            {
+                method: "GET",
+                headers: { Authorization: `Bearer ${token}` },
+            }
+        );
         const data = await response.json();
         dispatch(setPosts({ posts: data }));
     };
@@ -33,9 +37,9 @@ const PostsWidget = ({ userId, isProfile = false }) => {
         if (isProfile) {
             getUserPosts();
         } else {
-            getPosts();
+            getGroupPosts();
         }
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [user.group]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const sortedPosts = Array.isArray(posts)
         ? [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))

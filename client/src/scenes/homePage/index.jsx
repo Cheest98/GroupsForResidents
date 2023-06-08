@@ -5,7 +5,7 @@ import MyPostWidget from "../../scenes/widgets/NewPostWidget";
 import PostsWidget from "../../scenes/widgets/PostsWidget";
 const HomePage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-    const { _id, picturePath } = useSelector((state) => state.user);
+    const { _id, picturePath, group } = useSelector((state) => state.user);
 
     return (
         <Box>
@@ -23,7 +23,7 @@ const HomePage = () => {
                 </Box>
                 <Box width="100%"
                     p="1rem 20%"
-                ><PostsWidget />
+                ><PostsWidget key={group} />
                 </Box>
             </Box>
         </Box>

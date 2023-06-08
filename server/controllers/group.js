@@ -14,28 +14,50 @@ export const createGroup = async (req, res) => {
 };
 // To fix   
 export const addUserToGroup = async (req, res) => {
-    const { userId } = req.body;
-    const { groupId } = req.params;
+  const { userId, password } = req.body;
+  const { groupId } = req.params;
 
-    try {
-        const group = await Group.findById(groupId);
-        const user = await User.findById(userId);
+  try {
+      const group = await Group.findById(groupId);
+      const user = await User.findById(userId);
 
-        if (!group) {
-            return res.status(404).json({ message: 'Group not found' });
+      if (!group) {
+          return res.status(404).json({ message: 'Group not found' });
+      }
+
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+
+      // check password
+      if (group.password !== password) {
+          return res.status(403).json({ message: 'Incorrect password' });
+      }
+
+       // If user has a previous group, remove them from it
+       if (user.group) {
+        const previousGroup = await Group.findById(user.group);
+        if (previousGroup) {
+            const index = previousGroup.members.indexOf(user._id);
+            if (index > -1) {
+                previousGroup.members.splice(index, 1);
+                await previousGroup.save();
+            }
         }
-
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        group.users.push(user);
-        await group.save();
-
-        res.json({ group });
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to add user to group' });
     }
+
+    // Add user to the new group
+    group.members.push(user._id);
+    await group.save();
+
+    // Update the user's group
+    user.group = group._id;
+    await user.save();
+
+    res.json({ group });
+} catch (error) {
+    res.status(500).json({ message: 'Failed to add user to group' });
+}
 };
 
 /* READ */

@@ -8,6 +8,7 @@ import GroupView from "../widgets/GroupWidgets/GroupView"
 
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
+    const [groups, setGroups] = useState([]);
     const { userId } = useParams();
     const token = useSelector((state) => state.token);
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
@@ -21,8 +22,18 @@ const ProfilePage = () => {
         setUser(data);
     };
 
+    const getGroups = async () => {
+        const response = await fetch("http://localhost:3001/groups", {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await response.json();
+        setGroups(data);
+    };
+
     useEffect(() => {
         getUser();
+        getGroups();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
     //console.log(user.group)
     if (!user) return null;
@@ -41,8 +52,8 @@ const ProfilePage = () => {
                 </Box>
                 <Box width="100%"
                     p="1rem 20%"
-                ><UserWidget userId={userId} picturePath={user.picturePath} />
-                    <GroupView group={user.group} />
+                ><UserWidget groups={groups} userId={userId} picturePath={user.picturePath} getGroups={getGroups} />
+                    <GroupView groups={groups} />
                 </Box>
             </Box>
         </Box>)
