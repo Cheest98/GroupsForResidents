@@ -41,21 +41,19 @@ const ProfilePage = () => {
         <Box>
             <Navbar />
             <Box
-                width="100%"
+
                 padding="2rem 6%"
+                display={isNonMobileScreens ? "flex" : "block"}
                 gap="0.5rem"
+                justifyContent="center"
             >
-                <Box
-                    flexBasis={isNonMobileScreens ? "42%" : undefined}
-                    mt={isNonMobileScreens ? undefined : "2rem"}
-                >
+                <Box width="50%">
+                    <UserWidget groups={groups} userId={userId} picturePath={user.picturePath} getGroups={getGroups} />
                 </Box>
-                <Box width="100%"
-                    p="1rem 20%"
-                ><UserWidget groups={groups} userId={userId} picturePath={user.picturePath} getGroups={getGroups} />
+                <Box>
                     <GroupView groups={groups} />
                 </Box>
             </Box>
-        </Box>)
+        </Box >)
 }
 export default ProfilePage;

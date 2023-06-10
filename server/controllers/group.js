@@ -70,6 +70,27 @@ export const getAllGroups = async (req, res) => {
   }
 };
 
+export const getUserGroup = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const user = await User.findById(id);
+      if (!user) {
+          res.status(404).json({ message: "User not found" });
+          return;
+      }
+
+      const group = await Group.findById(user.group);
+      if (!group) {
+          res.status(404).json({ message: "Group not found" });
+          return;
+      }
+
+      res.status(200).json(group);
+  } catch (err) {
+      res.status(404).json({ message: err.message });
+  }
+};
+
 export const addUserToGlobalGroup = async (userId) => {
     try {
       const selectedGroup = await Group.findById('643db2e5ed80753e9ab0b322');
