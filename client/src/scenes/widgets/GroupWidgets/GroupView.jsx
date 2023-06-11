@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography, useTheme, Divider, useMediaQuery, TextField, Button } from "@mui/material";
 import { LocalPhone, MailOutline, EditOutlined } from "@mui/icons-material";
 import Modal from '@mui/material/Modal';
@@ -8,15 +8,13 @@ import WidgetWrapper from "../../../components/WidgetWrapper";
 import ModalWrapper from "../../../components/ModalWrapper";
 import FlexAround from "../../../components/FlexAround";
 import { useDispatch, useSelector } from "react-redux";
-import { setGroups, setPosts, setUser } from "../../../state";
-import { useEffect, useState } from "react";
+import { setGroups, setUser } from "../../../state";
+import { useState } from "react";
 
-const GroupView = ({ groups }) => {
+const GroupView = ({ userGroup, groups, getUserGroup }) => {
     const user = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
     const dispatch = useDispatch();
-
-    const [userGroup, setUserGroup] = useState(null);
     const [search, setSearch] = useState('');
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [password, setPassword] = useState('');
@@ -28,28 +26,9 @@ const GroupView = ({ groups }) => {
 
     const isNonMobile = useMediaQuery("(min-width:600px)");
 
-    const getUserGroup = async () => {
-        const response = await fetch(`http://localhost:3001/users/${user._id}/group`, {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await response.json();
-        if (response.ok) {
-            setUserGroup(data);
-            console.log(data);
-        } else {
-            console.error(data.message);
-        }
-    };
-
-    useEffect(() => {
-        getUserGroup();
-    }, []);
-
     const filteredGroups = groups.filter(group => group.name.includes(search));
 
     const handleSearchChange = (event) => {
-
         setSearch(event.target.value);
     };
 
@@ -64,6 +43,7 @@ const GroupView = ({ groups }) => {
     const handleCloseModal = () => {
         setSelectedGroup(null);
     };
+
     const handleJoinClick = async () => {
         if (!selectedGroup) return;
 
@@ -78,7 +58,6 @@ const GroupView = ({ groups }) => {
                 password
             })
         });
-        console.log(user._id, password, user.group)
         const data = await response.json();
 
         if (!response.ok) {
@@ -93,9 +72,11 @@ const GroupView = ({ groups }) => {
             // update groups
             dispatch(setGroups({ groups: data.groups }));
             dispatch(setUser({ user: { group: data.group._id } }));
+            getUserGroup();
         }
     };
 
+    // need to optymalize rendering groupwidget after changing group
     return (
         <WidgetWrapper m="2rem 0" width="100%">
             <TextField type="text" value={search} onChange={handleSearchChange} placeholder="Search Group" />
@@ -103,16 +84,12 @@ const GroupView = ({ groups }) => {
                 Groups
             </Typography>
             <Box>
-                {userGroup && (
-                    <>
-                        <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
-                            User Group Name: {userGroup.name}
-                        </Typography>
-                        <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
-                            User Group Description: {userGroup.description}
-                        </Typography>
-                    </>
-                )}
+                <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
+                    User Group Name: {userGroup?.name}
+                </Typography>
+                <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
+                    User Group Description:  {userGroup?.description}  </Typography>
+
                 <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
                     Groups
                 </Typography>

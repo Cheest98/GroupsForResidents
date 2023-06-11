@@ -9,6 +9,7 @@ import GroupView from "../widgets/GroupWidgets/GroupView"
 const ProfilePage = () => {
     const [user, setUser] = useState(null);
     const [groups, setGroups] = useState([]);
+    const [userGroup, setUserGroup] = useState(null);
     const { userId } = useParams();
     const token = useSelector((state) => state.token);
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
@@ -31,11 +32,24 @@ const ProfilePage = () => {
         setGroups(data);
     };
 
+    const getUserGroup = async () => {
+        const response = await fetch(`http://localhost:3001/groups/${userId}/group`, {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await response.json();
+        setUserGroup(data);
+    };
+    // cos jest zjebane, bo cały czas mi gety pobiera
+
     useEffect(() => {
         getUser();
+        getUserGroup();
         getGroups();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
     //console.log(user.group)
+
+
     if (!user) return null;
     return (
         <Box>
@@ -51,7 +65,7 @@ const ProfilePage = () => {
                     <UserWidget groups={groups} userId={userId} picturePath={user.picturePath} getGroups={getGroups} />
                 </Box>
                 <Box>
-                    <GroupView groups={groups} />
+                    <GroupView getUserGroup={getUserGroup} userGroup={userGroup} groups={groups} />
                 </Box>
             </Box>
         </Box >)

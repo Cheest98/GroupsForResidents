@@ -71,23 +71,18 @@ export const getAllGroups = async (req, res) => {
 };
 
 export const getUserGroup = async (req, res) => {
+  const { userId } = req.params;
+
   try {
-      const { id } = req.params;
-      const user = await User.findById(id);
+      const user = await User.findById(userId).populate('group');
+
       if (!user) {
-          res.status(404).json({ message: "User not found" });
-          return;
+          return res.status(404).json({ message: 'User not found' });
       }
 
-      const group = await Group.findById(user.group);
-      if (!group) {
-          res.status(404).json({ message: "Group not found" });
-          return;
-      }
-
-      res.status(200).json(group);
-  } catch (err) {
-      res.status(404).json({ message: err.message });
+      res.status(200).json(user.group);
+  } catch (error) {
+      res.status(500).json({ message: 'Failed to get user group' });
   }
 };
 

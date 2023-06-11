@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/creategroup', createGroup);
 router.put('/:groupId/users', addUserToGroup);
+router.get('/:userId/group', getUserGroup);
 router.get("/", verifyToken, getAllGroups);
-router.get("/users/:id/group", verifyToken, getUserGroup);
 
 export default router;
