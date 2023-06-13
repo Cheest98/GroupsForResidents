@@ -108,6 +108,7 @@ const GroupView = ({ userGroup, groups, getUserGroup }) => {
                 </Box>
 
             ))}
+            <Button >Create  new group</Button>
             <Modal open={selectedGroup != null} onClose={handleCloseModal}>
                 <ModalWrapper>
                     <Box>

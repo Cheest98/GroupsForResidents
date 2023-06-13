@@ -3,16 +3,47 @@ import Group from "../models/group.js";
 
 
 export const createGroup = async (req, res) => {
-    const { name } = req.body;
 
-    try {
-        const group = await Group.create({ name });
-        res.status(201).json({ group });
-    } catch (error) {
-        res.status(500).json({ message: 'Failed to create group' });
+  try {
+    const { userId, name, description, password } = req.body;
+    const user = await User.findById(userId);
+
+    const newGroup = new Group({
+        name,
+        creator: userId,
+        description,
+        password,
+    });
+
+    await newGroup.save();
+
+    // If user has a previous group, remove them from it
+    if (user.group) {
+        const previousGroup = await Group.findById(user.group);
+        if (previousGroup) {
+            const index = previousGroup.members.indexOf(user._id);
+            if (index > -1) {
+                previousGroup.members.splice(index, 1);
+                await previousGroup.save();
+            }
+        }
     }
+
+   // Add user to the new group
+   newGroup.members.push(user._id);
+   await newGroup.save();
+
+   // Update the user's group
+   user.group = newGroup._id;
+   await user.save();
+
+   res.json({ group: newGroup });
+  } catch (error) {
+      res.status(500).json({ message: 'Failed to create group' });
+  }
 };
 // To fix   
+
 export const addUserToGroup = async (req, res) => {
   const { userId, password } = req.body;
   const { groupId } = req.params;
