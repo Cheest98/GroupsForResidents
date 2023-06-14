@@ -20,18 +20,19 @@ import {
 import FlexBetween from "../../../components/FlexBetween";
 import FlexAround from "../../../components/FlexAround";
 import WidgetWrapper from "../../../components/WidgetWrapper";
+import Modal from '@mui/material/Modal';
 import { useState } from "react";
 import { setGroups, setUser } from "../../../state/index"
 import { useDispatch, useSelector } from "react-redux";
 
-const NewGroupWidget = () => {
+const NewGroupWidget = ({ handleCancelCreatingClick }) => {
     const dispatch = useDispatch();
     const [newGroup, setNewGroup] = useState({ name: '', description: '', password: '' });
     const { palette } = useTheme();
     const user = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
 
-    const handleTask = async () => {
+    const handleCreateGroup = async () => {
         const response = await fetch(`http://localhost:3001/groups`, {
             method: "POST",
             headers: {
@@ -46,11 +47,10 @@ const NewGroupWidget = () => {
             }),
         });
         const group = await response.json();
-        dispatch(setGroups({ groups: group.groups }));// assuming setGroups function takes group object and adds to state
-        setNewGroup({ name: '', description: '', password: '' }); // Reset fields
-        //dispatch(setGroups({ groups: group.groups }));
+        dispatch(setGroups({ groups: group.groups }));// assuming setGroups function takes group object and adds to state // Reset fields
         dispatch(setUser({ user: { group: group.group._id } }));
-        dispatch(setGroups(group));
+        setNewGroup({ name: '', description: '', password: '' });
+        handleCancelCreatingClick();
     };
 
     const handleInputChange = (e) => {
@@ -104,7 +104,7 @@ const NewGroupWidget = () => {
             <FlexBetween>
                 <Button
                     disabled={!newGroup.name || !newGroup.password} // Check both fields
-                    onClick={handleTask}
+                    onClick={handleCreateGroup}
                     sx={{
                         color: palette.background.alt,
                         backgroundColor: palette.primary.main,
@@ -113,9 +113,10 @@ const NewGroupWidget = () => {
                 >
                     Create Group
                 </Button>
+                <Button onClick={handleCancelCreatingClick}>Cancel</Button>
             </FlexBetween>
         </WidgetWrapper>
     );
 };
 
-export default NewGroupWidget;
+export default NewGroupWidget; 

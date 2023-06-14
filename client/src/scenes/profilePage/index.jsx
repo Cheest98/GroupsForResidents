@@ -56,9 +56,6 @@ const ProfilePage = () => {
                 <Box>
                     <GroupView getUserGroup={getUserGroup} userGroup={userGroup} groups={groups} />
                 </Box>
-                <Box>
-                    <NewGroupWidget getUserGroup={getUserGroup} groups={groups} />
-                </Box>
             </Box>
         </Box>)
 }

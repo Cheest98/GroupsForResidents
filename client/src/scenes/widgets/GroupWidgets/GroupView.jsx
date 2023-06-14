@@ -6,7 +6,9 @@ import UserImage from "../../../components/UserImage";
 import FlexBetween from "../../../components/FlexBetween";
 import WidgetWrapper from "../../../components/WidgetWrapper";
 import ModalWrapper from "../../../components/ModalWrapper";
+import CreatingGroupModalWrapper from "../../../components/CreatingGroupModalWrapper";
 import FlexAround from "../../../components/FlexAround";
+import NewGroupWidget from "./NewGroupWidget";
 import { useDispatch, useSelector } from "react-redux";
 import { setGroups, setUser } from "../../../state";
 import { useState } from "react";
@@ -18,6 +20,7 @@ const GroupView = ({ userGroup, groups, getUserGroup }) => {
     const [search, setSearch] = useState('');
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [password, setPassword] = useState('');
+    const [creating, setCreating] = useState(false);
 
     const { palette } = useTheme();
     const dark = palette.neutral.dark;
@@ -76,6 +79,13 @@ const GroupView = ({ userGroup, groups, getUserGroup }) => {
         }
     };
 
+    const handleCreateClick = () => {
+        setCreating(true);
+    };
+    const handleCancelCreatingClick = () => {
+        setCreating(false);
+    };
+
     // need to optymalize rendering groupwidget after changing group
     return (
         <WidgetWrapper m="2rem 0" width="100%">
@@ -108,7 +118,7 @@ const GroupView = ({ userGroup, groups, getUserGroup }) => {
                 </Box>
 
             ))}
-            <Button >Create  new group</Button>
+            <Button onClick={() => handleCreateClick()} >Create  new group</Button>
             <Modal open={selectedGroup != null} onClose={handleCloseModal}>
                 <ModalWrapper>
                     <Box>
@@ -124,6 +134,11 @@ const GroupView = ({ userGroup, groups, getUserGroup }) => {
                         <Button onClick={handleJoinClick}>Join</Button>
                     </Box>
                 </ModalWrapper>
+            </Modal >
+            <Modal open={creating === true} onClose={handleCancelCreatingClick}>
+                <CreatingGroupModalWrapper>
+                    <NewGroupWidget handleCancelCreatingClick={handleCancelCreatingClick} />
+                </CreatingGroupModalWrapper>
             </Modal >
         </WidgetWrapper >
 
