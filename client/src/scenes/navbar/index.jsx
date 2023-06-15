@@ -33,11 +33,13 @@ const Navbar = () => {
     const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
 
     const theme = useTheme();
-    const neutralLight = theme.palette.neutral.light;
-    const dark = theme.palette.neutral.dark;
-    const background = theme.palette.background.default;
-    const primaryLight = theme.palette.primary.light;
-    const alt = theme.palette.background.alt;
+    const {
+        palette: {
+            neutral: { light: neutralLight, dark },
+            background: { default: background, alt },
+            primary: { light: primaryLight }
+        }
+    } = useTheme();
 
     const fullName = `${user.firstName} ${user.lastName}`;
 
@@ -188,10 +190,6 @@ const Navbar = () => {
                                 <LightMode sx={{ color: dark, fontSize: "25px" }} />
                             )}
                         </IconButton>
-                        {/*                         <Message sx={{ fontSize: "25px" }} />
-                        <Notifications sx={{ fontSize: "25px" }} />
-                        <Help sx={{ fontSize: "25px" }} /> */}
-
                     </FlexBetween>
                 </Box>
             )}

@@ -1,10 +1,16 @@
 import Post from "../models/Post.js";
 import User from "../models/user.js";
+
 export const  createPost = async (req, res) => {
   try {
     const { userId, description, picturePath } = req.body;
     
     const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+  }
+
     const newPost = new Post({
       user:userId,
       userFirstName: user.firstName,

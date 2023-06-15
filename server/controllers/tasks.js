@@ -5,7 +5,13 @@ import User from "../models/user.js";
 export const createTask = async (req, res) => {
   try {
     const { userId, title, description, status } = req.body;
+
     const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+  }
+
     const newTask = new Task({
       user: userId,
       userFirstName: user.firstName,

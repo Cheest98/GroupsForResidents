@@ -7,7 +7,7 @@ const AuthorWidget = ({ userId }) => {
     const { palette } = useTheme();
     const main = palette.neutral.main;
     const [authorData, setAuthorData] = useState(null);
-    const token = useSelector((state) => state.token);
+    const token = useSelector(({ token }) => token);
 
     useEffect(() => {
         const fetchAuthorData = async () => {

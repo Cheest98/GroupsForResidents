@@ -8,4 +8,5 @@ const router = express.Router();
 router.get("/", verifyToken, getFeedPosts);
 router.get("/:userId/posts", verifyToken, getUserPosts);
 router.get("/group/:groupId", getPostsByGroup);
+
 export default router;

@@ -83,6 +83,7 @@ const Form = () => {
     });
     const loggedIn = await loggedInResponse.json();
     onSubmitProps.resetForm();
+
     if (loggedIn) {
       dispatch(
         setLogin({
@@ -95,9 +96,12 @@ const Form = () => {
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
+
     if (isLogin) await login(values, onSubmitProps);
+
     if (isRegister) await register(values, onSubmitProps);
   };
+
   return (<Formik
     onSubmit={handleFormSubmit}
     initialValues={isLogin ? initialValuesLogin : initialValuesRegister}
