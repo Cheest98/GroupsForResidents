@@ -30,7 +30,7 @@ const UserSchema = new mongoose.Schema(
             type: String,
             default: "p1.jpeg",
         },
-        group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group', default:"643db2e5ed80753e9ab0b321" }
+        group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group', default:"648f09d31228c141e8199382" }
     }
 )
 
