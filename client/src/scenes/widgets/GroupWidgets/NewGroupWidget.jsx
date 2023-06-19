@@ -1,36 +1,22 @@
 import {
-    EditOutlined,
-    DeleteOutlined,
-    AttachFileOutlined,
-    GifBoxOutlined,
-    ImageOutlined,
-    MicOutlined,
-    MoreHorizOutlined,
-} from "@mui/icons-material";
-import {
-    Box,
-    Divider,
-    Typography,
-    InputBase,
-    useTheme,
     Button,
-    IconButton,
-    useMediaQuery,
+    Divider,
+    InputBase,
+    useTheme
 } from "@mui/material";
-import FlexBetween from "../../../components/FlexBetween";
-import FlexAround from "../../../components/FlexAround";
-import WidgetWrapper from "../../../components/WidgetWrapper";
-import Modal from '@mui/material/Modal';
 import { useState } from "react";
-import { setGroups, setUser } from "../../../state/index"
 import { useDispatch, useSelector } from "react-redux";
+import FlexBetween from "../../../components/FlexBetween";
+import WidgetWrapper from "../../../components/WidgetWrapper";
+import { setGroups, setUser } from "../../../state/index";
 
-const NewGroupWidget = ({ handleCancelCreatingClick }) => {
+const NewGroupWidget = ({ handleCancelCreatingClick, getGroups, getUserGroup }) => {
     const dispatch = useDispatch();
     const [newGroup, setNewGroup] = useState({ name: '', description: '', password: '' });
     const { palette } = useTheme();
     const user = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
+
 
     const handleCreateGroup = async () => {
         const response = await fetch(`http://localhost:3001/groups`, {
@@ -51,6 +37,8 @@ const NewGroupWidget = ({ handleCancelCreatingClick }) => {
         dispatch(setUser({ user: { group: group.group._id } }));
         setNewGroup({ name: '', description: '', password: '' });
         handleCancelCreatingClick();
+        getGroups();
+        getUserGroup();
     };
 
     const handleInputChange = (e) => {

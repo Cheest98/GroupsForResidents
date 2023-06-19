@@ -1,19 +1,14 @@
-import React, { useEffect } from "react";
-import { Box, Typography, useTheme, Divider, useMediaQuery, TextField, Button } from "@mui/material";
-import { LocalPhone, MailOutline, EditOutlined } from "@mui/icons-material";
+import { Box, Button, Divider, TextField, Typography, useTheme } from "@mui/material";
 import Modal from '@mui/material/Modal';
-import UserImage from "../../../components/UserImage";
-import FlexBetween from "../../../components/FlexBetween";
-import WidgetWrapper from "../../../components/WidgetWrapper";
-import ModalWrapper from "../../../components/ModalWrapper";
-import CreatingGroupModalWrapper from "../../../components/CreatingGroupModalWrapper";
-import FlexAround from "../../../components/FlexAround";
-import NewGroupWidget from "./NewGroupWidget";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import CreatingGroupModalWrapper from "../../../components/CreatingGroupModalWrapper";
+import ModalWrapper from "../../../components/ModalWrapper";
+import WidgetWrapper from "../../../components/WidgetWrapper";
 import { setGroups, setUser } from "../../../state";
-import { useState } from "react";
+import NewGroupWidget from "./NewGroupWidget";
 
-const GroupView = ({ userGroup, groups, getUserGroup }) => {
+const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
     const user = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
     const dispatch = useDispatch();
@@ -22,12 +17,17 @@ const GroupView = ({ userGroup, groups, getUserGroup }) => {
     const [password, setPassword] = useState('');
     const [creating, setCreating] = useState(false);
 
+    const [deletePassword, setDeletePassword] = useState('');
+
+    const handleDeleteChange = (event) => {
+        setDeletePassword(event.target.value);
+    };
+
+
     const { palette } = useTheme();
     const dark = palette.neutral.dark;
-    const medium = palette.neutral.medium;
     const main = palette.neutral.main;
 
-    const isNonMobile = useMediaQuery("(min-width:600px)");
 
     const filteredGroups = groups.filter(group => group.name.includes(search));
 
@@ -45,6 +45,50 @@ const GroupView = ({ userGroup, groups, getUserGroup }) => {
 
     const handleCloseModal = () => {
         setSelectedGroup(null);
+    };
+
+    const handleDeleteClick = async () => {
+        if (!userGroup || !user) return;
+
+        console.log('handleDeleteClick called');  // Add this
+
+        const response = await fetch(`http://localhost:3001/groups/${userGroup._id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                userId: user._id,
+                password: deletePassword
+            })
+        });
+
+        if (!response.ok) {
+            console.log('Failed to delete group');
+        } else {
+            console.log('Group deleted');
+            // Clear password and refresh groups
+            setDeletePassword('');
+            setSelectedGroup(null);
+            getGroups();
+            getUserGroup();
+            // Fetch updated user data
+            const userResponse = await fetch(`http://localhost:3001/users/${user._id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+
+            if (!userResponse.ok) {
+                console.log('Failed to fetch updated user data');
+            } else {
+                const updatedUser = await userResponse.json();
+                // Update user data in the Redux store
+                dispatch(setUser(updatedUser));
+            }
+        }
     };
 
     const handleJoinClick = async () => {
@@ -89,10 +133,21 @@ const GroupView = ({ userGroup, groups, getUserGroup }) => {
     // need to optymalize rendering groupwidget after changing group
     return (
         <WidgetWrapper m="2rem 0" width="100%">
-            <TextField type="text" value={search} onChange={handleSearchChange} placeholder="Search Group" />
             <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
-                Groups
+                My group
             </Typography>
+            {userGroup?.creator === user._id && (
+                <Box>
+                    <TextField
+                        label="Password"
+                        type="password"
+                        value={deletePassword}
+                        onChange={handleDeleteChange}
+                        placeholder="Group Password to Delete"
+                    />
+                    <Button onClick={handleDeleteClick}>Delete Group</Button>
+                </Box>
+            )}
             <Box>
                 <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
                     User Group Name: {userGroup?.name}
@@ -104,7 +159,8 @@ const GroupView = ({ userGroup, groups, getUserGroup }) => {
                     Groups
                 </Typography>
             </Box>
-            {filteredGroups.map((groupItem) => (
+            <Box><TextField type="text" value={search} onChange={handleSearchChange} placeholder="Search Group" /></Box>
+            {search.length >= 3 && filteredGroups.map((groupItem) => (
                 <Box key={groupItem._id}>
                     <Typography variant="h3" color={dark} fontWeight="300">
                         Name: {groupItem.name}
@@ -116,8 +172,8 @@ const GroupView = ({ userGroup, groups, getUserGroup }) => {
                     <Button onClick={() => handleGroupSelect(groupItem)}>Join</Button>
                     <Divider />
                 </Box>
-
             ))}
+
             <Button onClick={() => handleCreateClick()} >Create  new group</Button>
             <Modal open={selectedGroup != null} onClose={handleCloseModal}>
                 <ModalWrapper>
@@ -137,7 +193,7 @@ const GroupView = ({ userGroup, groups, getUserGroup }) => {
             </Modal >
             <Modal open={creating === true} onClose={handleCancelCreatingClick}>
                 <CreatingGroupModalWrapper>
-                    <NewGroupWidget handleCancelCreatingClick={handleCancelCreatingClick} />
+                    <NewGroupWidget handleCancelCreatingClick={handleCancelCreatingClick} getGroups={getGroups} getUserGroup={getUserGroup} />
                 </CreatingGroupModalWrapper>
             </Modal >
         </WidgetWrapper >

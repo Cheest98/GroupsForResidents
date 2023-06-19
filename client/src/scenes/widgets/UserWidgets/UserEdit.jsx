@@ -1,22 +1,21 @@
-import { useState, React } from "react";
+import { Cancel, CheckCircle, LocalPhone, MailOutline } from "@mui/icons-material";
+import { Box, Divider, TextField, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { React, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Box, Typography, useTheme, Divider, useMediaQuery, TextField } from "@mui/material";
-import { LocalPhone, MailOutline, Cancel, CheckCircle } from "@mui/icons-material";
-import UserImage from "../../../components/UserImage";
-import FlexBetween from "../../../components/FlexBetween";
-import WidgetWrapper from "../../../components/WidgetWrapper";
 import FlexAround from "../../../components/FlexAround";
+import FlexBetween from "../../../components/FlexBetween";
+import UserImage from "../../../components/UserImage";
+import WidgetWrapper from "../../../components/WidgetWrapper";
 import { setUser } from "../../../state";
 
 const UserEdit = ({ user, picturePath, handleCancelClick, getUser }) => {
     const { palette } = useTheme();
     const dispatch = useDispatch();
-    const dark = palette.neutral.dark;
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
     const token = useSelector((state) => state.token);
     const isNonMobile = useMediaQuery("(min-width:600px)");
-    const { firstName, lastName, group } = user;
+    const { firstName, lastName } = user;
     const [formData, setFormData] = useState({
         // Stan formularza edycji
         firstName,
@@ -45,21 +44,19 @@ const UserEdit = ({ user, picturePath, handleCancelClick, getUser }) => {
                 body: JSON.stringify(formData),
             });
             if (response.ok) {
-                // Zapis zmian powiódł się
-                // Wykonaj odpowiednie akcje po zapisie (np. wyświetl powiadomienie, odśwież dane, itp.)
-                console.log("Zapisano zmiany");
+
+                console.log("Changes saved");
 
                 await getUser();
                 dispatch(setUser({ user: formData }));
                 handleCancelClick();
             } else {
-                // Zapis zmian nie powiódł się
-                // Wyświetl odpowiedni komunikat lub wykonaj inne działania
-                console.error("Błąd podczas zapisu zmian");
+
+                console.error("Error while saving changes");
             }
         } catch (error) {
             // Obsłuż błąd związany z zapisem zmian
-            console.error("Błąd podczas zapisu zmian", error);
+            console.error("Error while saving changes", error);
             console.log(user);
         }
     };

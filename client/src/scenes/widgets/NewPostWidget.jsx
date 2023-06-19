@@ -1,7 +1,7 @@
 import {
-    EditOutlined,
-    DeleteOutlined,
     AttachFileOutlined,
+    DeleteOutlined,
+    EditOutlined,
     GifBoxOutlined,
     ImageOutlined,
     MicOutlined,
@@ -9,20 +9,20 @@ import {
 } from "@mui/icons-material";
 import {
     Box,
-    Divider,
-    Typography,
-    InputBase,
-    useTheme,
     Button,
+    Divider,
     IconButton,
+    InputBase,
+    Typography,
     useMediaQuery,
+    useTheme,
 } from "@mui/material";
-import FlexBetween from "../../components/FlexBetween";
+import { useState } from "react";
 import Dropzone from "react-dropzone";
+import { useDispatch, useSelector } from "react-redux";
+import FlexBetween from "../../components/FlexBetween";
 import UserImage from "../../components/UserImage";
 import WidgetWrapper from "../../components/WidgetWrapper";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "../../state";
 
 const NewPostWidget = ({ picturePath }) => {

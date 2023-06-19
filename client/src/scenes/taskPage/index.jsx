@@ -1,13 +1,10 @@
 import { Box, useMediaQuery } from "@mui/material";
-import { useSelector } from "react-redux";
 import Navbar from "../../scenes/navbar";
 import MyTaskWidget from "../../scenes/widgets/NewTaskWidget";
 import TasksWidget from "../widgets/TasksWidget";
-//import TasksWidget from "../../scenes/widgets/TasksWidget";
 
 const TaskPage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-    const { _id, picturePath } = useSelector((state) => state.user);
 
     return (
         <Box>

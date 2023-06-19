@@ -1,5 +1,5 @@
+import { Button } from '@mui/material';
 import React from 'react';
-import { Box, Button } from '@mui/material';
 import TaskWrapper from '../WidgetWrapper';
 
 const TaskItem = ({ task, deleteTask, updateTaskStatus }) => {

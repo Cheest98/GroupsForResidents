@@ -1,11 +1,9 @@
 import { Box, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import Navbar from "../../scenes/navbar";
+import GroupView from "../widgets/GroupWidgets/GroupView";
 import UserWidget from "../widgets/UserWidget";
-import GroupView from "../widgets/GroupWidgets/GroupView"
-import NewGroupWidget from "../widgets/GroupWidgets/NewGroupWidget"
 
 const ProfilePage = () => {
     const token = useSelector((state) => state.token);
@@ -54,9 +52,10 @@ const ProfilePage = () => {
                     <UserWidget groups={groups} userId={user._id} picturePath={user.picturePath} getGroups={getGroups} />
                 </Box>
                 <Box>
-                    <GroupView getUserGroup={getUserGroup} userGroup={userGroup} groups={groups} />
+                    <GroupView getUserGroup={getUserGroup} userGroup={userGroup} groups={groups} getGroups={getGroups} />
                 </Box>
             </Box>
         </Box>)
 }
+
 export default ProfilePage; 

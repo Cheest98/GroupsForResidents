@@ -1,27 +1,13 @@
 import {
-    EditOutlined,
-    DeleteOutlined,
-    AttachFileOutlined,
-    GifBoxOutlined,
-    ImageOutlined,
-    MicOutlined,
-    MoreHorizOutlined,
-} from "@mui/icons-material";
-import {
-    Box,
-    Divider,
-    Typography,
-    InputBase,
-    useTheme,
     Button,
-    IconButton,
-    useMediaQuery,
+    Divider,
+    InputBase,
+    useTheme
 } from "@mui/material";
-import FlexBetween from "../../components/FlexBetween";
-import FlexAround from "../../components/FlexAround"
-import WidgetWrapper from "../../components/WidgetWrapper";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import FlexBetween from "../../components/FlexBetween";
+import WidgetWrapper from "../../components/WidgetWrapper";
 import { setTasks } from "../../state";
 
 const MyTaskWidget = () => {
@@ -30,9 +16,6 @@ const MyTaskWidget = () => {
     const { palette } = useTheme();
     const { _id } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-    const mediumMain = palette.neutral.mediumMain;
-    const medium = palette.neutral.medium;
 
     const handleTask = async () => {
         const formData = new FormData();
