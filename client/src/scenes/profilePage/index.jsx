@@ -48,10 +48,10 @@ const ProfilePage = () => {
                 gap="0.5rem"
                 justifyContent="center"
             >
-                <Box width="50%">
+                <Box width={isNonMobileScreens ? "70%" : "100%"}>
                     <UserWidget groups={groups} userId={user._id} picturePath={user.picturePath} getGroups={getGroups} />
                 </Box>
-                <Box>
+                <Box width={isNonMobileScreens ? "30%" : "100%"}>
                     <GroupView getUserGroup={getUserGroup} userGroup={userGroup} groups={groups} getGroups={getGroups} />
                 </Box>
             </Box>

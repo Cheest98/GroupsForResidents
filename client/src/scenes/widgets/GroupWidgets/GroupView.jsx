@@ -1,4 +1,4 @@
-import { Box, Button, Divider, TextField, Typography, useTheme } from "@mui/material";
+import { Box, Button, Divider, TextField, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Modal from '@mui/material/Modal';
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,7 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [password, setPassword] = useState('');
     const [creating, setCreating] = useState(false);
-
+    const isNonMobile = useMediaQuery("(min-width:600px)");
     const [deletePassword, setDeletePassword] = useState('');
 
     const handleDeleteChange = (event) => {
@@ -153,28 +153,29 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
                     User Group Name: {userGroup?.name}
                 </Typography>
                 <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
-                    User Group Description:  {userGroup?.description}  </Typography>
-
+                    User Group Description: {userGroup?.description}
+                </Typography>
                 <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
                     Groups
                 </Typography>
             </Box>
-            <Box><TextField type="text" value={search} onChange={handleSearchChange} placeholder="Search Group" /></Box>
-            {search.length >= 3 && filteredGroups.map((groupItem) => (
-                <Box key={groupItem._id}>
-                    <Typography variant="h3" color={dark} fontWeight="300">
-                        Name: {groupItem.name}
-                    </Typography>
-                    <Typography variant="h3" color={dark} fontWeight="300">
-                        Description: {groupItem.description}
-                    </Typography>
-
-                    <Button onClick={() => handleGroupSelect(groupItem)}>Join</Button>
-                    <Divider />
-                </Box>
-            ))}
-
-            <Button onClick={() => handleCreateClick()} >Create  new group</Button>
+            <Box>
+                <TextField type="text" value={search} onChange={handleSearchChange} placeholder="Search Group" />
+            </Box>
+            {search.length >= 3 &&
+                filteredGroups.map((groupItem) => (
+                    <Box key={groupItem._id}>
+                        <Typography variant="h3" color={dark} fontWeight="300">
+                            Name: {groupItem.name}
+                        </Typography>
+                        <Typography variant="h3" color={dark} fontWeight="300">
+                            Description: {groupItem.description}
+                        </Typography>
+                        <Button onClick={() => handleGroupSelect(groupItem)}>Join</Button>
+                        <Divider />
+                    </Box>
+                ))}
+            <Button onClick={handleCreateClick}>Create new group</Button>
             <Modal open={selectedGroup != null} onClose={handleCloseModal}>
                 <ModalWrapper>
                     <Box>
@@ -190,15 +191,13 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
                         <Button onClick={handleJoinClick}>Join</Button>
                     </Box>
                 </ModalWrapper>
-            </Modal >
-            <Modal open={creating === true} onClose={handleCancelCreatingClick}>
+            </Modal>
+            <Modal open={creating} onClose={handleCancelCreatingClick}>
                 <CreatingGroupModalWrapper>
                     <NewGroupWidget handleCancelCreatingClick={handleCancelCreatingClick} getGroups={getGroups} getUserGroup={getUserGroup} />
                 </CreatingGroupModalWrapper>
-            </Modal >
-        </WidgetWrapper >
-
-
+            </Modal>
+        </WidgetWrapper>
     );
 };
 
