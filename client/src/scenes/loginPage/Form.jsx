@@ -19,14 +19,14 @@ import FlexBetween from "../../components/FlexBetween";
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
   lastName: yup.string().required("required"),
-  email: yup.string().email("Invalid email").required("required"),
+  email: yup.string().email("Not a valid email address").required("required"),
   password: yup.string().required("required"),
   picture: yup.string().required("required"),
 
 })
 
 const loginSchema = yup.object().shape({
-  email: yup.string().email("Invalid email").required("required"),
+  email: yup.string().email("Not a valid email address").required("required"),
   password: yup.string().required("required"),
 })
 
@@ -81,10 +81,17 @@ const Form = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
     });
-    const loggedIn = await loggedInResponse.json();
-    onSubmitProps.resetForm();
 
-    if (loggedIn) {
+    if (!loggedInResponse.ok) {
+      const errorData = await loggedInResponse.json();
+      onSubmitProps.setErrors({
+        email: 'Incorrect email or password.',
+        password: 'Incorrect email or password.',
+      });
+    } else {
+      const loggedIn = await loggedInResponse.json();
+      onSubmitProps.resetForm();
+
       dispatch(
         setLogin({
           user: loggedIn.user,

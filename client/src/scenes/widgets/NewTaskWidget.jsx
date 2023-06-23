@@ -2,7 +2,9 @@ import {
     Button,
     Divider,
     InputBase,
-    useTheme
+    useTheme,
+    Box,
+    useMediaQuery
 } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +18,7 @@ const MyTaskWidget = () => {
     const { palette } = useTheme();
     const { _id } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
+    const isNonMobileScreens = useMediaQuery('(min-width:1000px)');
 
     const handleTask = async () => {
         const formData = new FormData();
@@ -43,7 +46,11 @@ const MyTaskWidget = () => {
 
     return (
         <WidgetWrapper>
-            <FlexBetween gap="1.5rem">
+            <Box width="100%"
+                padding="1rem 6%"
+                display={isNonMobileScreens ? 'flex' : 'block'}
+                gap="0.5rem"
+            >
                 <InputBase
                     placeholder="Title"
                     onChange={handleTitleChange}
@@ -53,6 +60,7 @@ const MyTaskWidget = () => {
                         backgroundColor: palette.neutral.light,
                         borderRadius: "2rem",
                         padding: "1rem 2rem",
+                        mb: "0.5rem",
                     }}
                 />
                 <InputBase
@@ -66,7 +74,7 @@ const MyTaskWidget = () => {
                         padding: "1rem 2rem",
                     }}
                 />
-            </FlexBetween>
+            </Box>
 
             <Divider sx={{ margin: "1.25rem 0" }} />
 

@@ -2,7 +2,9 @@ import {
     Button,
     Divider,
     InputBase,
-    useTheme
+    useTheme,
+    Box,
+    useMediaQuery
 } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +18,7 @@ const NewGroupWidget = ({ handleCancelCreatingClick, getGroups, getUserGroup }) 
     const { palette } = useTheme();
     const user = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
+    const isNonMobileScreens = useMediaQuery('(min-width:1000px)');
 
 
     const handleCreateGroup = async () => {
@@ -48,7 +51,10 @@ const NewGroupWidget = ({ handleCancelCreatingClick, getGroups, getUserGroup }) 
 
     return (
         <WidgetWrapper>
-            <FlexBetween gap="1.5rem">
+            <Box width="100%"
+                padding="1rem 6%"
+                display={isNonMobileScreens ? 'flex' : 'block'}
+                gap="0.5rem">
                 <InputBase
                     placeholder="Name"
                     name="name"
@@ -59,6 +65,7 @@ const NewGroupWidget = ({ handleCancelCreatingClick, getGroups, getUserGroup }) 
                         backgroundColor: palette.neutral.light,
                         borderRadius: "2rem",
                         padding: "1rem 2rem",
+                        mb: "0.5rem"
                     }}
                 />
                 <InputBase
@@ -71,6 +78,7 @@ const NewGroupWidget = ({ handleCancelCreatingClick, getGroups, getUserGroup }) 
                         backgroundColor: palette.neutral.light,
                         borderRadius: "2rem",
                         padding: "1rem 2rem",
+                        mb: "0.5rem",
                     }}
                 />
                 <InputBase
@@ -83,9 +91,10 @@ const NewGroupWidget = ({ handleCancelCreatingClick, getGroups, getUserGroup }) 
                         backgroundColor: palette.neutral.light,
                         borderRadius: "2rem",
                         padding: "1rem 2rem",
+                        mb: "0.5rem"
                     }}
                 />
-            </FlexBetween>
+            </Box>
 
             <Divider sx={{ margin: "1.25rem 0" }} />
 
