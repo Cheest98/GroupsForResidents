@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import {globalGroup, userDescription, userPhone}  from "../data/const.js"
+
 
 const UserSchema = new mongoose.Schema(
     {
@@ -26,11 +28,25 @@ const UserSchema = new mongoose.Schema(
             min: 5,
             max: 50,
         },
+        description: {
+            type: String,
+            require: true,
+            min: 5,
+            max: 500,
+            default: userDescription
+        },
+        phone: {
+            type: String,
+            require: false,
+            min: 5,
+            max: 10,
+            default: userPhone
+        },
         picturePath: {
             type: String,
             default: "p1.jpeg",
         },
-        group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group', default:"648f09d31228c141e8199382" }
+        group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group', default: globalGroup }
     }
 )
 

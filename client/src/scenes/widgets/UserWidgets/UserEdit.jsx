@@ -15,11 +15,13 @@ const UserEdit = ({ user, picturePath, handleCancelClick, getUser }) => {
     const main = palette.neutral.main;
     const token = useSelector((state) => state.token);
     const isNonMobile = useMediaQuery("(min-width:600px)");
-    const { firstName, lastName } = user;
+    const { firstName, lastName, description, phone } = user;
     const [formData, setFormData] = useState({
         // Stan formularza edycji
         firstName,
         lastName,
+        description,
+        phone
     });
 
     const handleFormChange = (e) => {
@@ -117,10 +119,14 @@ const UserEdit = ({ user, picturePath, handleCancelClick, getUser }) => {
                         <FlexBetween gap="1rem">
                             <LocalPhone sx={{ color: main }} />
                             <Box>
-                                <Typography color={main} fontWeight="500" align="left">
-                                    Phone
-                                </Typography>
-                                <Typography color={medium}>997997997</Typography>
+                                <TextField
+                                    label="Phone"
+                                    value={formData.phone}
+                                    onChange={handleFormChange}
+                                    onSubmit={handleSubmit}
+                                    name="phone"
+                                    sx={{ gridColumn: "span 4" }}
+                                />
                             </Box>
                         </FlexBetween>
 
@@ -134,10 +140,18 @@ const UserEdit = ({ user, picturePath, handleCancelClick, getUser }) => {
                 <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
                     Description
                 </Typography>
-                <Box display="flex" justifyContent="space-evenly">
-                    <Typography color={main} >
-                        orem ipsum dolor sit amet, consectetur adipiscing elit. Sed at dui nec nisl viverra mollis eget vitae sem. Praesent rutrum, diam nec gravida commodo, orci tellus blandit neque, in malesuada mi purus eleifend erat. In lorem turpis, blandit malesuada libero et, commodo ultricies erat. Maecenas sodales blandit malesuada. Maecenas aliquet lectus nibh, sollicitudin gravida quam tempor non. Ut a commodo est, vel dictum risus. Nullam varius bibendum augue sit amet sollicitudin. Donec risus justo, tincidunt et metus sit amet, congue tempus massa. Suspendisse velit orci, accumsan at pellentesque quis, varius a tellus. Nam semper metus sit amet velit cursus posuere in in quam. Suspendisse eget sem vel lorem scelerisque commodo. Fusce tristique mi vel bibendum commodo. Cras velit nulla, auctor eget dignissim ullamcorper, commodo et tellus. Suspendisse eget justo tempus, scelerisque nisl vehicula, fermentum lectus.
-                    </Typography>
+                <Box >
+                    <TextField
+                        label="Description"
+                        value={formData.description}
+                        onChange={handleFormChange}
+                        onSubmit={handleSubmit}
+                        name="description"
+                        multiline
+                        rows="4"
+                        maxRows="10"
+                        fullWidth
+                    />
                 </Box>
             </Box>
         </WidgetWrapper >

@@ -28,12 +28,12 @@ export const getUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { id } = req.params;
-    const { firstName, lastName, email } = req.body;
+    const { firstName, lastName, email, description, phone } = req.body;
 
     // Znajdź użytkownika w bazie danych i zaktualizuj jego dane
     const updatedUser = await User.findByIdAndUpdate(
       id,
-      { firstName, lastName, email },
+      { firstName, lastName, description, email, phone },
       { new: true } // Zwraca zaktualizowany obiekt użytkownika
     );
 

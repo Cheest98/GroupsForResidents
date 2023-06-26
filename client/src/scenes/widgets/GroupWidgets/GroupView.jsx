@@ -18,10 +18,8 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
     const [creating, setCreating] = useState(false);
     const isNonMobile = useMediaQuery("(min-width:600px)");
     const [deletePassword, setDeletePassword] = useState('');
-
-    const handleDeleteChange = (event) => {
-        setDeletePassword(event.target.value);
-    };
+    const [joinGroupError, setJoinGroupError] = useState('');
+    const [deletePasswordError, setDeletePasswordError] = useState('');
 
 
     const { palette } = useTheme();
@@ -41,12 +39,15 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
 
     const handleGroupSelect = (group) => {
         setSelectedGroup(group);
+        console.log(group)
     };
 
     const handleCloseModal = () => {
         setSelectedGroup(null);
     };
-
+    const handleDeleteChange = (event) => {
+        setDeletePassword(event.target.value);
+    };
     const handleDeleteClick = async () => {
         if (!userGroup || !user) return;
 
@@ -66,6 +67,7 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
 
         if (!response.ok) {
             console.log('Failed to delete group');
+            setDeletePasswordError("Incorrect Password");
         } else {
             console.log('Group deleted');
             // Clear password and refresh groups
@@ -105,11 +107,14 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
                 password
             })
         });
+        console.log(user._id, password)
+        console.log(setSelectedGroup(selectedGroup))
         const data = await response.json();
 
         if (!response.ok) {
             // handle error
             console.log(data.message);
+            setJoinGroupError(data.message);
         } else {
             // successfully joined group
             console.log(data.group);
@@ -144,7 +149,8 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
                         value={deletePassword}
                         onChange={handleDeleteChange}
                         placeholder="Group Password to Delete"
-                    />
+                        error={Boolean(deletePasswordError)} // Show error style if there is an error
+                        helperText={deletePasswordError} />
                     <Button onClick={handleDeleteClick}>Delete Group</Button>
                 </Box>
             )}
@@ -185,6 +191,9 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
                             value={password}
                             onChange={handlePasswordChange}
                             placeholder="Group Password"
+                            error={Boolean(joinGroupError)} // Show error style if there is an error
+                            helperText={joinGroupError} // Display error message
+
                         />
                     </Box>
                     <Box>

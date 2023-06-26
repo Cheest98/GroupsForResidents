@@ -1,9 +1,9 @@
 import User from "../models/user.js";
 import Group from "../models/group.js";
+import {globalGroup}  from "../data/const.js"
 
 
 export const createGroup = async (req, res) => {
-
   try {
     const { userId, name, description, password } = req.body;
     const user = await User.findById(userId);
@@ -19,17 +19,23 @@ export const createGroup = async (req, res) => {
 
     // If user has a previous group, remove them from it
     if (user.group) {
-        const previousGroup = await Group.findById(user.group);
-
-        if (previousGroup) {
-            const index = previousGroup.members.indexOf(user._id);
-
-            if (index > -1) {
-                previousGroup.members.splice(index, 1);
-                await previousGroup.save();
-            }
-        }
-    }
+      const previousGroup = await Group.findById(user.group);
+  
+      if (previousGroup) {
+          const index = previousGroup.members.indexOf(user._id);
+  
+          if (index > -1) {
+              previousGroup.members.splice(index, 1);
+  
+              // If there are no members left in the group, delete the group
+              if (previousGroup.members.length === 0) {
+                  await Group.findByIdAndRemove(previousGroup._id);
+              } else {
+                  await previousGroup.save();
+              }
+          }
+      }
+  }
 
    // Add user to the new group
    newGroup.members.push(user._id);
@@ -45,41 +51,47 @@ export const createGroup = async (req, res) => {
       .json({ message: 'Failed to create group' });
   }
 };
-// To fix   
+
 
 export const addUserToGroup = async (req, res) => {
-  const { body: { userId }, params: { groupId } } = req;
+  const { body: { userId, password }, params: { groupId } } = req;
   try {
     const group = await Group.findById(groupId);
 
     if (!group) {
-                return res.status(404).json({ message: 'Group not found' });
-            }
-    
+        return res.status(404).json({ message: 'Group not found' });
+    }
+  
     const user = await User.findById(userId);
-    
+  
     if (!user) {
-                return res.status(404).json({ message: 'User not found' });
-            }
+        return res.status(404).json({ message: 'User not found' });
+    }
 
-      // check password
-      if (group.password !== password) {
-          return res.status(403)
-          .json({ message: 'Incorrect password' });
+    // check password
+    if (group.password !== password) {
+        return res.status(403)
+        .json({ message: 'Incorrect password' });
+    }
+
+    // If user has a previous group, remove them from it
+    if (user.group) {
+      const previousGroup = await Group.findById(user.group);
+
+      if (previousGroup) {
+          const index = previousGroup.members.indexOf(user._id);
+
+          if (index > -1) {
+              previousGroup.members.splice(index, 1);
+  
+              // If there are no members left in the group, delete the group
+              if (previousGroup.members.length === 0) {
+                  await Group.findByIdAndRemove(previousGroup._id);
+              } else {
+                  await previousGroup.save();
+              }
+          }
       }
-
-       // If user has a previous group, remove them from it
-       if (user.group) {
-        const previousGroup = await Group.findById(user.group);
-
-        if (previousGroup) {
-            const index = previousGroup.members.indexOf(user._id);
-
-            if (index > -1) {
-                previousGroup.members.splice(index, 1);
-                await previousGroup.save();
-            }
-        }
     }
 
     // Add user to the new group
@@ -92,10 +104,10 @@ export const addUserToGroup = async (req, res) => {
 
     res.json({ group });
 
-} catch (error) {
-    res.status(500)
-    .json({ message: 'Failed to add user to group' });
-}
+  } catch (error) {
+      res.status(500)
+      .json({ message: 'Failed to add user to group' });
+  }
 };
 
 /* READ */
@@ -132,7 +144,7 @@ export const getUserGroup = async (req, res) => {
 
 export const addUserToGlobalGroup = async (userId) => {
   try {
-    const selectedGroup = await Group.findById('648f09d31228c141e8199382');
+    const selectedGroup = await Group.findById(globalGroup);
     const currentUser = await User.findById(userId);
 
     if (!selectedGroup) {
@@ -156,58 +168,75 @@ export const addUserToGlobalGroup = async (userId) => {
 export const deleteGroup = async (req, res) => {
   const { userId, password } = req.body;
   const { groupId } = req.params;
-  const globalGroupId = '648f09d31228c141e8199382';
+  const globalGroupId = globalGroup;
+
   console.log('deleteGroup called with:', req.body, req.params);
 
   try {
-      const group = await Group.findById(groupId);
+    const group = await Group.findById(groupId);
 
-      if (!group) {
-          return res.status(404).json({ message: 'Group not found' });
-      }
+    if (!group) {
+        return res.status(404).json({ message: 'Group not found' });
+    }
 
-      // Check if the user is the creator
-      if (group.creator.toString() !== userId) {
-          return res.status(403).json({ message: 'User is not the creator of the group' });
-      }
+    // Check if the user is the creator
+    if (group.creator.toString() !== userId) {
+        return res.status(403).json({ message: 'User is not the creator of the group' });
+    }
 
-      // Check if the password is correct
-      if (group.password !== password) {
-          return res.status(403).json({ message: 'Incorrect password' });
-      }
+    // Check if the password is correct
+    if (group.password !== password) {
+        return res.status(403).json({ message: 'Incorrect password' });
+    }
 
-      const user = await User.findById(userId);
-      if (!user) {
-          return res.status(404).json({ message: 'User not found' });
-      }
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
 
-      // Update the user's group to Global Group and add them to its members
-      const globalGroup = await Group.findById(globalGroupId);
-      if (!globalGroup) {
-          return res.status(404).json({ message: 'Global Group not found' });
-      }
-      
-      user.group = globalGroupId;
-      await user.save();
+    // Update the user's group to Global Group and add them to its members
+    const globalGroup = await Group.findById(globalGroupId);
+    if (!globalGroup) {
+        return res.status(404).json({ message: 'Global Group not found' });
+    }
+    
+    user.group = globalGroupId;
+    await user.save();
 
-      if (!globalGroup.members.includes(user._id)) {
-          globalGroup.members.push(user._id);
-          await globalGroup.save();
-      }
+    if (!globalGroup.members.includes(user._id)) {
+        globalGroup.members.push(user._id);
+        await globalGroup.save();
+    }
 
-      // If there are still members in the group, make the next one the creator
-      if (group.members.length > 0) {
-          const nextCreator = group.members[0];
-          group.creator = nextCreator;
-          await group.save();
-      } else {
-          // If there are no members left, delete the group
-          await Group.findByIdAndRemove(groupId);
-      }
+    // Remove user from the group's members list
+    const index = group.members.indexOf(user._id);
+    if (index > -1) {
+        group.members.splice(index, 1);
+    }
 
-      res.json({ message: 'Group successfully updated/deleted' });
+    // If there are still members in the group, make the next one the creator
+    if (group.members.length > 0) {
+        const nextCreator = group.members[0];
+        group.creator = nextCreator;
+    } else {
+        // If there are no members left, delete the group
+        await Group.findByIdAndRemove(groupId);
+        return res.json({ message: 'Group successfully deleted' });
+    }
+
+    // Convert Mongoose document to plain JavaScript object
+    const groupObject = group.toObject();
+
+    // Replace members with the updated members list
+    groupObject.members = group.members;
+
+    // Save the updated group
+    await Group.findByIdAndUpdate(groupId, groupObject, { new: true });
+
+    res.json({ message: 'Group successfully updated' });
+
   } catch (error) {
     console.error(error); 
-      res.status(500).json({ message: 'Failed to update/delete group' });
+    res.status(500).json({ message: 'Failed to update/delete group' });
   }
 };

@@ -59,7 +59,7 @@ const UserView = ({ user, picturePath, handleEditClick }) => {
                                 <Typography color={main} fontWeight="500" align="left">
                                     Phone
                                 </Typography>
-                                <Typography color={medium}>997997997</Typography>
+                                <Typography color={medium}>{user.phone}</Typography>
                             </Box>
                         </FlexBetween>
 
@@ -75,7 +75,7 @@ const UserView = ({ user, picturePath, handleEditClick }) => {
                 </Typography>
                 <Box display="flex" justifyContent="space-evenly">
                     <Typography color={main} >
-                        orem ipsum dolor sit amet, consectetur adipiscing elit. Sed at dui nec nisl viverra mollis eget vitae sem. Praesent rutrum, diam nec gravida commodo, orci tellus blandit neque, in malesuada mi purus eleifend erat. In lorem turpis, blandit malesuada libero et, commodo ultricies erat. Maecenas sodales blandit malesuada. Maecenas aliquet lectus nibh, sollicitudin gravida quam tempor non. Ut a commodo est, vel dictum risus. Nullam varius bibendum augue sit amet sollicitudin. Donec risus justo, tincidunt et metus sit amet, congue tempus massa. Suspendisse velit orci, accumsan at pellentesque quis, varius a tellus. Nam semper metus sit amet velit cursus posuere in in quam. Suspendisse eget sem vel lorem scelerisque commodo. Fusce tristique mi vel bibendum commodo. Cras velit nulla, auctor eget dignissim ullamcorper, commodo et tellus. Suspendisse eget justo tempus, scelerisque nisl vehicula, fermentum lectus.
+                        {user.description}
                     </Typography>
                 </Box>
             </Box>
