@@ -4,12 +4,15 @@ import LoginPage from './scenes/loginPage';
 import ProfilePage from './scenes/profilePage';
 import TaskPage from './scenes/taskPage';
 import './App.css';
+
 import { useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { createTheme } from '@mui/material';
 import { themeSettings } from "./theme";
+
 function App() {
+  
   const mode = useSelector((state) => state.mode)
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode])
   const isAuth= Boolean(useSelector(({ token }) => token ));

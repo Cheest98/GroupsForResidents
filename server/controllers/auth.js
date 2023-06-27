@@ -1,41 +1,35 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/user.js";
-import Group from "../models/group.js";
-import { addUserToGroup, addUserToGlobalGroup } from "../controllers/group.js"
+import { addUserToGlobalGroup } from "../controllers/group.js";
 
 export const register = async (req, res) => {
-    try {
-      const {
-        firstName,
-        lastName,
-        email,
-        password,
-        picturePath,
-        group,
-      } = req.body;
-  
-      const salt = await bcrypt.genSalt();
-      const passwordHash = await bcrypt.hash(password, salt)
-  
-      const newUser = new User({
-        firstName,
-        lastName,
-        email,
-        password: passwordHash,
-        picturePath,
-        group,
-      });
-  
-      const savedUser = await newUser.save();
-  
-      await addUserToGlobalGroup(savedUser._id);
-  
-      res.status(201).json(savedUser);
-    } catch (err) {
-      res.status(500).json({ error: err.message });
-    }
-  };
+  try {
+    const { firstName, lastName, email, password, picturePath, group } = req.body;
+
+    const salt = await bcrypt.genSalt();
+    const passwordHash = await bcrypt.hash(password, salt);
+
+    const newUser = new User({
+      firstName,
+      lastName,
+      email,
+      password: passwordHash,
+      picturePath,
+      group,
+    });
+
+    const savedUser = await newUser.save();
+
+    await addUserToGlobalGroup(savedUser._id);
+
+    const { password: userPassword, ...userWithoutPassword } = savedUser.toObject();
+
+    res.status(201).json(userWithoutPassword);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
 
 /* LOGGING IN */
 export const login = async (req, res) => {
@@ -52,12 +46,10 @@ export const login = async (req, res) => {
       .json({ msg: "Invalid credentials." });
   
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-      delete user.password;
-      res.status(200)
-      .json({ token, user });
+      const { password: userPassword, ...userWithoutPassword } = user.toObject();
 
+      res.status(200).json({ token, user: userWithoutPassword });
     } catch (err) {
-      res.status(500)
-      .json({ error: err.message });
+      res.status(500).json({ error: err.message });
     }
-  };
+};

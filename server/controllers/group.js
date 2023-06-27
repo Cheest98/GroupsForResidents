@@ -4,6 +4,7 @@ import {globalGroup}  from "../data/const.js"
 
 
 export const createGroup = async (req, res) => {
+
   try {
     const { userId, name, description, password } = req.body;
     const user = await User.findById(userId);
@@ -31,28 +32,28 @@ export const createGroup = async (req, res) => {
               if (previousGroup.members.length === 0) {
                   await Group.findByIdAndRemove(previousGroup._id);
               } else {
+                  // Make the next person the creator
+                  previousGroup.creator = previousGroup.members[0];
                   await previousGroup.save();
               }
           }
       }
-  }
+    }
 
-   // Add user to the new group
-   newGroup.members.push(user._id);
-   await newGroup.save();
+    // Add user to the new group
+    newGroup.members.push(user._id);
+    await newGroup.save();
 
-   // Update the user's group
-   user.group = newGroup._id;
-   await user.save();
+    // Update the user's group
+    user.group = newGroup._id;
+    await user.save();
 
-   res.json({ group: newGroup });
+    res.json({ group: newGroup });
   } catch (error) {
       res.status(500)
       .json({ message: 'Failed to create group' });
   }
 };
-
-
 export const addUserToGroup = async (req, res) => {
   const { body: { userId, password }, params: { groupId } } = req;
   try {
@@ -77,18 +78,19 @@ export const addUserToGroup = async (req, res) => {
     // If user has a previous group, remove them from it
     if (user.group) {
       const previousGroup = await Group.findById(user.group);
-
+    
       if (previousGroup) {
           const index = previousGroup.members.indexOf(user._id);
-
+    
           if (index > -1) {
               previousGroup.members.splice(index, 1);
-  
-              // If there are no members left in the group, delete the group
               if (previousGroup.members.length === 0) {
+                  // If there are no members left, delete the group
                   await Group.findByIdAndRemove(previousGroup._id);
               } else {
-                  await previousGroup.save();
+                  const previousGroupObject = previousGroup.toObject();
+                  previousGroupObject.members = previousGroup.members;
+                  await Group.findByIdAndUpdate(previousGroup._id, previousGroupObject, { new: true });
               }
           }
       }

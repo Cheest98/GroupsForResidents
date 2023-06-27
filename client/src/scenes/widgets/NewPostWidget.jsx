@@ -1,11 +1,7 @@
 import {
-    AttachFileOutlined,
     DeleteOutlined,
     EditOutlined,
-    GifBoxOutlined,
     ImageOutlined,
-    MicOutlined,
-    MoreHorizOutlined,
 } from "@mui/icons-material";
 import {
     Box,
@@ -14,7 +10,6 @@ import {
     IconButton,
     InputBase,
     Typography,
-    useMediaQuery,
     useTheme,
 } from "@mui/material";
 import { useState } from "react";
@@ -29,18 +24,18 @@ const NewPostWidget = ({ picturePath }) => {
     const dispatch = useDispatch();
     const [isImage, setIsImage] = useState(false);
     const [image, setImage] = useState(null);
-    const [post, setPost] = useState("");
+    const [newPost, setNewPost] = useState("");
     const { palette } = useTheme(0);
     const { _id } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
-    const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
     const mediumMain = palette.neutral.mediumMain;
     const medium = palette.neutral.medium;
+
 
     const handlePost = async () => {
         const formData = new FormData();
         formData.append("userId", _id);
-        formData.append("description", post);
+        formData.append("description", newPost);
         if (image) {
             formData.append("picture", image);
             formData.append("picturePath", image.name);
@@ -51,10 +46,12 @@ const NewPostWidget = ({ picturePath }) => {
             headers: { Authorization: `Bearer ${token}` },
             body: formData,
         });
-        const posts = await response.json();
-        dispatch(setPosts({ posts }));
+
+        const postsInGroup = await response.json();
+
+        dispatch(setPosts({ posts: postsInGroup }));
         setImage(null);
-        setPost("");
+        setNewPost("");
     };
 
     return (
@@ -63,8 +60,8 @@ const NewPostWidget = ({ picturePath }) => {
                 <UserImage image={picturePath} />
                 <InputBase
                     placeholder="What's on your mind..."
-                    onChange={(e) => setPost(e.target.value)}
-                    value={post}
+                    onChange={(e) => setNewPost(e.target.value)}
+                    value={newPost}
                     sx={{
                         width: "100%",
                         backgroundColor: palette.neutral.light,
@@ -132,7 +129,7 @@ const NewPostWidget = ({ picturePath }) => {
                 </FlexBetween>
 
                 <Button
-                    disabled={!post}
+                    disabled={!newPost}
                     onClick={handlePost}
                     sx={{
                         color: palette.background.alt,

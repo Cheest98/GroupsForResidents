@@ -11,25 +11,47 @@ const ProfilePage = () => {
     const user = useSelector((state) => state.user);
     const [groups, setGroups] = useState([]);
     const [userGroup, setUserGroup] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
 
 
     const getGroups = async () => {
-        const response = await fetch("http://localhost:3001/groups", {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await response.json();
-        setGroups(data);
+        setLoading(true);
+        try {
+            const response = await fetch('http://localhost:3001/groups', {
+                method: 'GET',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch groups');
+            }
+            const data = await response.json();
+            setGroups(data);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const getUserGroup = async () => {
-        const response = await fetch(`http://localhost:3001/groups/${user._id}/group`, {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await response.json();
-        setUserGroup(data);
+        setLoading(true);
+        try {
+            const response = await fetch(`http://localhost:3001/groups/${user._id}/group`, {
+                method: 'GET',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (!response.ok) {
+                throw new Error('Failed to fetch user group');
+            }
+            const data = await response.json();
+            setUserGroup(data);
+        } catch (error) {
+            setError(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -49,10 +71,18 @@ const ProfilePage = () => {
                 justifyContent="center"
             >
                 <Box width={isNonMobileScreens ? "70%" : "100%"}>
-                    <UserWidget groups={groups} userId={user._id} picturePath={user.picturePath} getGroups={getGroups} />
+                    <UserWidget
+                        groups={groups}
+                        userId={user._id}
+                        picturePath={user.picturePath}
+                        getGroups={getGroups} />
                 </Box>
                 <Box width={isNonMobileScreens ? "30%" : "100%"}>
-                    <GroupView getUserGroup={getUserGroup} userGroup={userGroup} groups={groups} getGroups={getGroups} />
+                    <GroupView
+                        getUserGroup={getUserGroup}
+                        userGroup={userGroup}
+                        groups={groups}
+                        getGroups={getGroups} />
                 </Box>
             </Box>
         </Box>)

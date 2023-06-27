@@ -1,4 +1,4 @@
-import { Box, Button, Divider, TextField, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Button, Divider, TextField, Typography, useTheme } from "@mui/material";
 import Modal from '@mui/material/Modal';
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +16,6 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [password, setPassword] = useState('');
     const [creating, setCreating] = useState(false);
-    const isNonMobile = useMediaQuery("(min-width:600px)");
     const [deletePassword, setDeletePassword] = useState('');
     const [joinGroupError, setJoinGroupError] = useState('');
     const [deletePasswordError, setDeletePasswordError] = useState('');
@@ -66,7 +65,7 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
         });
 
         if (!response.ok) {
-            console.log('Failed to delete group');
+
             setDeletePasswordError("Incorrect Password");
         } else {
             console.log('Group deleted');

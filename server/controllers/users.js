@@ -18,7 +18,7 @@ export const getUser = async (req, res) => {
     }
 
     res.status(200).json({ user, group: groupInfo });
-    //console.log({ user, group: groupInfo })
+  
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
@@ -30,11 +30,11 @@ export const updateUser = async (req, res) => {
     const { id } = req.params;
     const { firstName, lastName, email, description, phone } = req.body;
 
-    // Znajdź użytkownika w bazie danych i zaktualizuj jego dane
+  
     const updatedUser = await User.findByIdAndUpdate(
       id,
       { firstName, lastName, description, email, phone },
-      { new: true } // Zwraca zaktualizowany obiekt użytkownika
+      { new: true } 
     );
 
     if (!updatedUser) {

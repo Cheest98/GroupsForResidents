@@ -9,7 +9,7 @@ export const  createPost = async (req, res) => {
     
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
-  }
+    }
 
     const newPost = new Post({
       user:userId,
@@ -20,10 +20,13 @@ export const  createPost = async (req, res) => {
       userPicturePath: user.picturePath,
       group: user.group
     });
+    
     await newPost.save();
 
-    const post = await Post.find();
-    res.status(201).json(post);
+    // Get all posts in the same group
+    const postsInGroup = await Post.find({ group: user.group });
+    
+    res.status(201).json(postsInGroup);
   } catch (err) {
     res.status(409).json({ message: err.message });
   }
