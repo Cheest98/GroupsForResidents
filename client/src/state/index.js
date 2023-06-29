@@ -7,7 +7,8 @@ const initialState = {
   token: null,
   posts: [],
   tasks: [],
-  groups:[]
+  groups:[],
+  shoppingLists: [],
 };
 
 export const authSlice = createSlice({
@@ -53,6 +54,18 @@ export const authSlice = createSlice({
       });
       state.tasks = updatedTasks;
     },
+    setShoppingLists: (state, action) => {
+      state.shoppingLists = action.payload.shoppingLists || [];
+    },
+    setShoppingList: (state, action) => {
+      const updatedShoppingLists = state.shoppingLists.map((list) => {
+        if (list._id === action.payload.list._id) {
+          return action.payload.list;
+        }
+        return list;
+      });
+      state.shoppingLists = updatedShoppingLists;
+    },
   },
 });
 
@@ -66,6 +79,8 @@ export const {
   setPost,
   setTasks,
   setTask,
+  setShoppingList,
+  setShoppingLists,
 } = authSlice.actions;
 
 export default authSlice.reducer;

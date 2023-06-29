@@ -3,6 +3,7 @@ import HomePage from './scenes/homePage';
 import LoginPage from './scenes/loginPage';
 import ProfilePage from './scenes/profilePage';
 import TaskPage from './scenes/taskPage';
+import ShoppingListPage from './scenes/shoppingPage';
 import './App.css';
 
 import { useMemo } from 'react';
@@ -27,6 +28,7 @@ function App() {
             <Route path="/home" element={ isAuth ? <HomePage /> : <Navigate to="/"/>}/>
             <Route path="/tasks" element={ isAuth ? <TaskPage /> : <Navigate to="/"/> }/>
             <Route path="/profile/:userId" element={  isAuth ?  <ProfilePage /> : <Navigate to="/" />}/>
+            <Route path="/shopping-lists" element={ isAuth ? <ShoppingListPage /> : <Navigate to="/"/>}/>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

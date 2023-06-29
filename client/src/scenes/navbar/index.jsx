@@ -63,7 +63,7 @@ const Navbar = () => {
             {/* DESKTOP NAV */}
             {isNonMobileScreens ? (
                 <FlexBetween gap="2rem">
-                    <ReceiptLong sx={{
+                    <ReceiptLong onClick={() => navigate(`/shopping-lists`)} sx={{
                         fontSize: "25px", "&:hover": {
                             color: neutralLight,
                             cursor: "pointer",
