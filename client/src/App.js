@@ -28,7 +28,7 @@ function App() {
             <Route path="/home" element={ isAuth ? <HomePage /> : <Navigate to="/"/>}/>
             <Route path="/tasks" element={ isAuth ? <TaskPage /> : <Navigate to="/"/> }/>
             <Route path="/profile/:userId" element={  isAuth ?  <ProfilePage /> : <Navigate to="/" />}/>
-            <Route path="/shopping-lists" element={ isAuth ? <ShoppingListPage /> : <Navigate to="/"/>}/>
+            <Route path="/lists" element={ isAuth ? <ShoppingListPage /> : <Navigate to="/"/>}/>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
