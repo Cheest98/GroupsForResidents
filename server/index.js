@@ -12,6 +12,7 @@ import { fileURLToPath } from "url";
 import {register} from "./controllers/auth.js";
 import {createPost} from "./controllers/posts.js";
 import {createTask} from "./controllers/tasks.js";
+import {createShoppingList} from "./controllers/shoppingList.js"
 
 
 import { verifyToken } from "./middleware/auth.js";
@@ -39,6 +40,11 @@ app.use(cors());
 
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send({ message: 'Something broke!' });
+});
+
 /* FILE STORAGE */
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -55,14 +61,14 @@ app.post("/auth/register", upload.single("picture"), register);
 app.post("/posts",verifyToken, upload.single("picture"), createPost)
 app.post("/tasks",verifyToken, upload.single("picture"), createTask)
 
-
+app.post("/lists",verifyToken, upload.single("picture"), createShoppingList)
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes )
 app.use("/groups", groupRoutes )
 app.use("/posts", postRoutes )
 app.use("/tasks", taskRoutes )
-app.use("/shoppinglists", shoppingListRoutes)
+app.use("/lists", shoppingListRoutes)
 
 /* MONGOOSE  SETUP*/
 const PORT = process.env.PORT || 6001;

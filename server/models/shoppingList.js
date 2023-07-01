@@ -1,14 +1,15 @@
 import mongoose from 'mongoose';
 
-const shoppingItemSchema = mongoose.Schema({
+const shoppingItemSchema = new mongoose.Schema({
   name: String,
   quantity: Number,
   bought: { type: Boolean, default: false }
 });
 
-const shoppingListSchema = mongoose.Schema({
+const shoppingListSchema = new mongoose.Schema({
   name: String,
-  items: [shoppingItemSchema],
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  items: { type: [shoppingItemSchema] },
   group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' },
   completed: { type: Boolean, default: false },
   totalPrice: { type: Number, default: 0 }, // Add a totalPrice field to the list

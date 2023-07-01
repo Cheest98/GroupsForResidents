@@ -11,16 +11,16 @@ import { useDispatch, useSelector } from "react-redux";
 import WidgetWrapper from "../../../components/WidgetWrapper";
 import { setShoppingLists } from "../../../state/index";
 
-const NewShoppingListWidget = () => {
+const NewShoppingListWidget = ({ getGroupShoppingList }) => {
     const dispatch = useDispatch();
     const [list, setList] = useState({ name: '' });
     const { palette } = useTheme();
+    const currentShoppingLists = useSelector((state) => state.shoppingLists);
     const { _id } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
     const isNonMobileScreens = useMediaQuery('(min-width:1000px)');
 
     const handleList = async () => {
-
 
         const response = await fetch(`http://localhost:3001/lists`, {
             method: "POST",
@@ -29,7 +29,7 @@ const NewShoppingListWidget = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                user: _id,
+                userId: _id,
                 name: list.name,
                 items: [], // Creating an empty list
                 totalPrice: 0 // Initial totalPrice
@@ -37,12 +37,16 @@ const NewShoppingListWidget = () => {
         });
         if (!response.ok) {
             console.error('Server responded with status', response.status);
-            console.log(_id, list.name)
             return;
         }
-        const newLists = await response.json();
-        dispatch(setShoppingLists({ shoppingLists: newLists }));
+        const newList = await response.json();
+
+        const updatedShoppingLists = [...currentShoppingLists, newList];
+
+        dispatch(setShoppingLists({ shoppingLists: updatedShoppingLists }));
         setList({ name: '' }); // Reset the list name
+
+        getGroupShoppingList();
     };
 
     const handleNameChange = (e) => {

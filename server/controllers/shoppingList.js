@@ -1,5 +1,5 @@
 import ShoppingList from '../models/shoppingList.js';
-import Group from '../models/group.js';
+import User from "../models/user.js";
 
 export const getShoppingLists = async (req, res) => {
   try {
@@ -13,17 +13,19 @@ export const getShoppingLists = async (req, res) => {
 
 export const createShoppingList = async (req, res) => {
     try {
-      const { groupId, name, items, totalPrice } = req.body; // Add totalPrice to the request body
+      const { userId, name, items, totalPrice } = req.body; // Add totalPrice to the request body
       
-      const group = await Group.findById(groupId);
-      if (!group) {
-        return res.status(404).json({ message: 'Group not found' });
+      const user = await User.findById(userId);
+    
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
       }
-  
+
       const newList = new ShoppingList({
+        user:userId,
         name,
         items,
-        group: groupId,
+        group: user.group,
         totalPrice // Assign the totalPrice from the request body
       });
   
@@ -31,7 +33,7 @@ export const createShoppingList = async (req, res) => {
   
       res.status(201).json(newList);
     } catch (error) {
-      res.status(409).json({ message: error.message });
+      res.status(500).json({ message: error.message })
     }
   };
   
