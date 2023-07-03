@@ -66,6 +66,14 @@ export const authSlice = createSlice({
       });
       state.shoppingLists = updatedShoppingLists;
     },
+
+    deleteList: (state, action) => {
+      const listId = action.payload;
+      const updatedLists = state.shoppingLists.filter((list) => list._id !== listId);
+      state.shoppingLists = updatedLists;
+    },
+
+
   },
 });
 
@@ -81,6 +89,11 @@ export const {
   setTask,
   setShoppingList,
   setShoppingLists,
+  updateTotalPrice,
+  deleteItem,
+  addItem,
+  deleteList,
+  completeList
 } = authSlice.actions;
 
 export default authSlice.reducer;

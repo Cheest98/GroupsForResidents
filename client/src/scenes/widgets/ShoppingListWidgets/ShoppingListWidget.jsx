@@ -1,11 +1,25 @@
-import { Box, } from "@mui/material";
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { setShoppingLists } from "../../../state/index";
+import ShoppingList from "../../../components/shoppingListComponent/shoppingList"
 
 const ShoppingListWidget = ({ getGroupShoppingList }) => {
+    const dispatch = useDispatch();
     const shoppingLists = useSelector((state) => state.shoppingLists);
+    const token = useSelector((state) => state.token);
+    const user = useSelector((state) => state.user);
 
 
+    const deleteShoppingList = async (listId) => {
+        const response = await fetch(`http://localhost:3001/lists/${listId}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.ok) {
+            const updatedShoppingLists = shoppingLists.filter((list) => list._id !== listId);
+            dispatch(setShoppingLists({ shoppingLists: updatedShoppingLists }));
+        }
+    };
     useEffect(() => {
         getGroupShoppingList();
     }, [getGroupShoppingList]);
@@ -13,25 +27,7 @@ const ShoppingListWidget = ({ getGroupShoppingList }) => {
 
 
     return (
-        <Box>
-            <Box>
-                <h1>Shopping Listss</h1>
-                {
-                    Array.isArray(shoppingLists) ? shoppingLists.map(list => (
-                        <div key={list._id}>
-                            <h2>{list.name}</h2>
-                            <ul>
-                                {list.items.map((item, index) => (
-                                    <li key={index}>{item.name} - Quantity: {item.quantity}</li>
-                                ))}
-                            </ul>
-                            <h3>Total Price: {list.totalPrice}</h3>
-                        </div>
-                    )) : <p>No Shopping Lists Found</p>
-                }
-            </Box>
-            ShoppingList
-        </Box>
+        <ShoppingList shoppingLists={shoppingLists} deleteShoppingList={deleteShoppingList} />
     );
 };
 
