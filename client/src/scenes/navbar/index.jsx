@@ -176,7 +176,7 @@ const Navbar = () => {
                                 </MenuItem>
                             </Select>
                         </FormControl>
-                        <ReceiptLong sx={{ fontSize: "25px" }} />
+                        <ReceiptLong onClick={() => navigate(`/lists`)} sx={{ fontSize: "25px" }} />
                         <PlaylistAddCheck onClick={() => navigate(`/tasks`)} sx={{ fontSize: "25px" }} />
                         <CalendarMonth sx={{ fontSize: "25px" }} />
                         <IconButton

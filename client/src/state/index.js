@@ -91,9 +91,7 @@ export const {
   setShoppingLists,
   updateTotalPrice,
   deleteItem,
-  addItem,
   deleteList,
-  completeList
 } = authSlice.actions;
 
 export default authSlice.reducer;

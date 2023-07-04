@@ -1,5 +1,5 @@
 import React from 'react';
-import TaskItem from './taskItem';
+import TaskItem from './TaskItem';
 import WidgetWrapper from '../WidgetWrapper';
 import { Box } from '@mui/material';
 

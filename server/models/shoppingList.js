@@ -12,8 +12,11 @@ const shoppingListSchema = new mongoose.Schema({
   items: { type: [shoppingItemSchema] },
   group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' },
   completed: { type: Boolean, default: false },
-  totalPrice: { type: Number, default: 0 }, // Add a totalPrice field to the list
-  completedAt: Date // Add a completedAt field to track when the list is completed
+  totalPrice: { type: Number, default: 0 }, 
+  completedAt: {
+    type: Date,
+    default: null,
+},
 });
 
 const ShoppingList = mongoose.model('ShoppingList', shoppingListSchema);

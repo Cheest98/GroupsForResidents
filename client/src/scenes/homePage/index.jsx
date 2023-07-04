@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import Navbar from "../../scenes/navbar";
 import MyPostWidget from "../../scenes/widgets/NewPostWidget";
 import PostsWidget from "../../scenes/widgets/PostsWidget";
+
 const HomePage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
     const { picturePath, group } = useSelector(({ user }) => user);;

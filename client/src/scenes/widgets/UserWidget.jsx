@@ -27,6 +27,7 @@ const UserWidget = ({ userId }) => {
     const handleCancelClick = () => {
         setEditing(false);
     };
+
     const handleEditClick = () => {
         setEditing(true);
     };

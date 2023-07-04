@@ -1,32 +1,26 @@
-import { Button } from "@mui/material";
-import { useSelector } from "react-redux";
+import { Box, useMediaQuery } from '@mui/material';
+import ShoppingRow from "./ShoppingRow";
 
-const ShoppingList = ({ shoppingLists, deleteShoppingList }) => {
-    const token = useSelector((state) => state.token);
-
-    const handleDelete = (listId) => {
-        deleteShoppingList(listId);
-    }
+const ShoppingList = ({ shoppingLists, deleteShoppingList, completeShoppingList, addItemToList }) => {
+    const todoLists = shoppingLists.filter((list) => list.completed === false);
+    const completedTasks = shoppingLists.filter((list) => list.completed === true);
+    const isNonMobileScreens = useMediaQuery('(min-width:1000px)');
 
     return (
-        <div>
-            {shoppingLists.map(list => (
-                <div key={list._id}>
-                    <h2>{list.name}</h2>
-                    <p>Total Price: {list.totalPrice}</p>
-                    <Button
-                        onClick={() => handleDelete(list._id)}
-                        sx={{
-                            color: "white",
-                            backgroundColor: "red",
-                            borderRadius: "3rem",
-                        }}
-                    >
-                        Delete List
-                    </Button>
-                </div>
-            ))}
-        </div>
+        <Box
+            width="100%"
+            padding="1rem 6%"
+            display={isNonMobileScreens ? 'flex' : 'block'}
+            gap="0.5rem"
+        >
+            <Box flexBasis={isNonMobileScreens ? '50%' : undefined}>
+                <ShoppingRow shoppingLists={todoLists} status="To buy" deleteShoppingList={deleteShoppingList} completeShoppingList={completeShoppingList} addItemToList={addItemToList} />
+            </Box>
+            <Box flexBasis={isNonMobileScreens ? '50%' : undefined}>
+                <ShoppingRow shoppingLists={completedTasks} status="Completed" deleteShoppingList={deleteShoppingList} />
+            </Box>
+        </Box>
+
     );
 };
 

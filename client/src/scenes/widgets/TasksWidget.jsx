@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import TaskList from "../../components/tasksComponents/taskList";
+import TaskList from "../../components/tasksComponents/TaskList";
 import { setTasks } from "../../state";
 
 const TasksWidget = ({ userId, isProfile }) => {

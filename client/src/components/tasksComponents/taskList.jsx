@@ -1,5 +1,5 @@
 import React from 'react';
-import TaskRow from './taskRow';
+import TaskRow from './TaskRow';
 import { Box, useMediaQuery } from '@mui/material';
 
 const TaskList = ({ tasks, deleteTask, updateTaskStatus }) => {

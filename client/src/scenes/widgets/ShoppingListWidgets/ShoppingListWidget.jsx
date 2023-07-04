@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import ShoppingList from "../../../components/shoppingListComponent/ShoppingList";
 import { setShoppingLists } from "../../../state/index";
-import ShoppingList from "../../../components/shoppingListComponent/shoppingList"
 
 const ShoppingListWidget = ({ getGroupShoppingList }) => {
     const dispatch = useDispatch();
@@ -20,14 +20,51 @@ const ShoppingListWidget = ({ getGroupShoppingList }) => {
             dispatch(setShoppingLists({ shoppingLists: updatedShoppingLists }));
         }
     };
+
+    const completeShoppingList = async (listId, totalPrice) => {
+        const response = await fetch(`http://localhost:3001/lists/${listId}/complete`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ completed: true, totalPrice: totalPrice })
+        });
+        if (response.ok) {
+            const updatedList = await response.json();
+            const updatedShoppingLists = shoppingLists.map((list) =>
+                list._id === updatedList._id ? updatedList : list
+            );
+            dispatch(setShoppingLists({ shoppingLists: updatedShoppingLists }));
+        }
+    };
+
+    const addItemToList = async (listId, item) => {
+        const response = await fetch(`http://localhost:3001/lists/${listId}/items`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(item),
+        });
+
+        if (response.ok) {
+            const updatedList = await response.json();
+            const updatedShoppingLists = shoppingLists.map((list) =>
+                list._id === updatedList._id ? updatedList : list
+            );
+
+            dispatch(setShoppingLists({ shoppingLists: updatedShoppingLists }));
+        }
+    };
+
     useEffect(() => {
         getGroupShoppingList();
     }, [getGroupShoppingList]);
 
-
-
     return (
-        <ShoppingList shoppingLists={shoppingLists} deleteShoppingList={deleteShoppingList} />
+        <ShoppingList shoppingLists={shoppingLists} deleteShoppingList={deleteShoppingList} completeShoppingList={completeShoppingList} addItemToList={addItemToList} />
     );
 };
 

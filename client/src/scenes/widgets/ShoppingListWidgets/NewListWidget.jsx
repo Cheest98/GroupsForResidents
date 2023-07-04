@@ -1,10 +1,10 @@
 import {
+    Box,
     Button,
     Divider,
     InputBase,
-    useTheme,
-    Box,
-    useMediaQuery
+    useMediaQuery,
+    useTheme
 } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

@@ -110,51 +110,50 @@ export const deleteShoppingList = async (req, res) => {
   }
 };
 
-export const completeItem = async (req, res) => {
-  try {
-    const { listId, itemId } = req.params;
 
+export const completeList = async (req, res) => {
+  try {
+      const { listId } = req.params;
+      const { totalPrice } = req.body; // Extract the totalPrice from the request body
+
+      const list = await ShoppingList.findById(listId);
+      if (!list) {
+          return res.status(404).json({ message: 'List not found' });
+      }
+
+      list.items.forEach(item => {
+          item.bought = true;
+      });
+
+      list.completed = true;
+      list.completedAt = new Date(); // Set the completedAt timestamp
+
+      if (totalPrice !== undefined) list.totalPrice = totalPrice; // Update the totalPrice if provided
+
+      await list.save();
+
+      res.json(list);
+  } catch (error) {
+      res.status(500).json({ message: error.message });
+  }
+};
+
+export const addItemToList = async (req, res) => {
+  try {
+    const { listId } = req.params;
+    const { name, quantity } = req.body; // Extract the new item's details from the request body
+  
     const list = await ShoppingList.findById(listId);
     if (!list) {
       return res.status(404).json({ message: 'List not found' });
     }
-
-    const item = list.items.id(itemId);
-    if (!item) {
-      return res.status(404).json({ message: 'Item not found' });
-    }
-
-    item.bought = !item.bought;
-
+  
+    list.items.push({ name, quantity, bought: false }); // Add the new item to the list
+  
     await list.save();
-
+  
     res.json(list);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
-export const completeList = async (req, res) => {
-    try {
-      const { listId } = req.params;
-  
-      const list = await ShoppingList.findById(listId);
-      if (!list) {
-        return res.status(404).json({ message: 'List not found' });
-      }
-  
-      list.items.forEach(item => {
-        item.bought = true;
-      });
-  
-      list.completed = true;
-      list.completedAt = new Date(); // Set the completedAt timestamp
-  
-      await list.save();
-  
-      res.json(list);
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  };
-  
