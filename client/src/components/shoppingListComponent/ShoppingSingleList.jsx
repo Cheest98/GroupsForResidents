@@ -2,7 +2,7 @@ import React from 'react';
 import CompletedList from './CompletedList';
 import ToBuyList from './ToBuyList';
 
-const ShoppingSingleList = ({ list, deleteShoppingList, completeShoppingList, addItemToList }) => {
+const ShoppingSingleList = ({ list, deleteShoppingList, completeShoppingList, addItemToList, removeItemFromList }) => {
 
 
     const handleDelete = (listId) => {
@@ -14,7 +14,7 @@ const ShoppingSingleList = ({ list, deleteShoppingList, completeShoppingList, ad
 
     return (
         !list.completed ? (
-            <ToBuyList list={list} handleDelete={handleDelete} handleComplete={handleComplete} addItemToList={addItemToList} />
+            <ToBuyList list={list} handleDelete={handleDelete} handleComplete={handleComplete} addItemToList={addItemToList} removeItemFromList={removeItemFromList} />
         ) : (
             <CompletedList list={list} handleDelete={handleDelete} />  // Pass list as a prop to your CompletedList component
         )

@@ -5,11 +5,13 @@ import { AddCircle, Cancel } from "@mui/icons-material"
 import { green } from '@mui/material/colors';
 
 
-export const ToBuyList = ({ list, handleDelete, handleComplete, addItemToList }) => {
+export const ToBuyList = ({ list, handleDelete, handleComplete, addItemToList, removeItemFromList }) => {
 
     const [price, setPrice] = useState(list.totalPrice); // Add state for price
     const [newItem, setNewItem] = useState({ name: '', quantity: 0 });
     const [addingItem, setAddingitem] = useState(false);
+
+
 
     const handlePriceChange = (e) => {
         setPrice(e.target.value);
@@ -45,6 +47,7 @@ export const ToBuyList = ({ list, handleDelete, handleComplete, addItemToList })
                             <Typography variant="body1">
                                 {item.name} - {item.quantity}
                             </Typography>
+                            <Cancel variant="outlined" color="error" onClick={() => removeItemFromList(list._id, item._id)} />
                         </ListItem>
                     ))}
                 </List>
@@ -67,7 +70,7 @@ export const ToBuyList = ({ list, handleDelete, handleComplete, addItemToList })
                                     value={newItem.quantity}
                                     onChange={handleItemChange}
                                 />
-                                <Button variant="outlined" color="primary" onClick={handleAddItem}>Add Item</Button>
+                                <Button variant="outlined" color="primary" disabled={!newItem.name || !newItem.quantity} onClick={handleAddItem}>Add Item</Button>
                                 < Cancel onClick={handleCancelClick} sx={{
                                     fontSize: "25px", "&:hover": {
                                         cursor: "pointer",

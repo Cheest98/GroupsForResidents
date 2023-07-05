@@ -59,12 +59,36 @@ const ShoppingListWidget = ({ getGroupShoppingList }) => {
         }
     };
 
+    const removeItemFromList = async (listId, itemId) => {
+        const response = await fetch(`http://localhost:3001/lists/${listId}/items/${itemId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            }
+        });
+
+        if (response.ok) {
+            const updatedList = await response.json();
+            const updatedShoppingLists = shoppingLists.map((list) =>
+                list._id === updatedList._id ? updatedList : list
+            );
+
+            dispatch(setShoppingLists({ shoppingLists: updatedShoppingLists }));
+        }
+    };
+
     useEffect(() => {
         getGroupShoppingList();
     }, [getGroupShoppingList]);
 
     return (
-        <ShoppingList shoppingLists={shoppingLists} deleteShoppingList={deleteShoppingList} completeShoppingList={completeShoppingList} addItemToList={addItemToList} />
+        <ShoppingList
+            shoppingLists={shoppingLists}
+            deleteShoppingList={deleteShoppingList}
+            completeShoppingList={completeShoppingList}
+            addItemToList={addItemToList}
+            removeItemFromList={removeItemFromList} />
     );
 };
 

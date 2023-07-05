@@ -8,7 +8,7 @@ import UserImage from "../../../components/UserImage";
 import WidgetWrapper from "../../../components/WidgetWrapper";
 import { setUser } from "../../../state";
 
-const UserEdit = ({ user, picturePath, handleCancelClick, getUser }) => {
+const UserEdit = ({ user, handleCancelClick, getUser }) => {
     const { palette } = useTheme();
     const dispatch = useDispatch();
     const medium = palette.neutral.medium;

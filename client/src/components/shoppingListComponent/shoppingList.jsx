@@ -1,7 +1,7 @@
 import { Box, useMediaQuery } from '@mui/material';
 import ShoppingRow from "./ShoppingRow";
 
-const ShoppingList = ({ shoppingLists, deleteShoppingList, completeShoppingList, addItemToList }) => {
+const ShoppingList = ({ shoppingLists, deleteShoppingList, completeShoppingList, addItemToList, removeItemFromList }) => {
     const todoLists = shoppingLists.filter((list) => list.completed === false);
     const completedTasks = shoppingLists.filter((list) => list.completed === true);
     const isNonMobileScreens = useMediaQuery('(min-width:1000px)');
@@ -14,7 +14,13 @@ const ShoppingList = ({ shoppingLists, deleteShoppingList, completeShoppingList,
             gap="0.5rem"
         >
             <Box flexBasis={isNonMobileScreens ? '50%' : undefined}>
-                <ShoppingRow shoppingLists={todoLists} status="To buy" deleteShoppingList={deleteShoppingList} completeShoppingList={completeShoppingList} addItemToList={addItemToList} />
+                <ShoppingRow
+                    shoppingLists={todoLists}
+                    status="To buy"
+                    deleteShoppingList={deleteShoppingList}
+                    completeShoppingList={completeShoppingList}
+                    addItemToList={addItemToList}
+                    removeItemFromList={removeItemFromList} />
             </Box>
             <Box flexBasis={isNonMobileScreens ? '50%' : undefined}>
                 <ShoppingRow shoppingLists={completedTasks} status="Completed" deleteShoppingList={deleteShoppingList} />

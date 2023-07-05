@@ -5,6 +5,7 @@ import NewListWidget from "../widgets/ShoppingListWidgets/NewListWidget"
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setShoppingLists } from '../../state/index';
+import FilterCompletedLists from "../../components/shoppingListComponent/FilterCompletedLists"
 
 const ShoppingListPage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
@@ -44,6 +45,7 @@ const ShoppingListPage = () => {
                 </Box>
             </Box>
             <ShoppinglistWidget getGroupShoppingList={getGroupShoppingList} />
+            <FilterCompletedLists />
         </Box>
     );
 };
