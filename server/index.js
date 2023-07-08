@@ -13,6 +13,7 @@ import {register} from "./controllers/auth.js";
 import {createPost} from "./controllers/posts.js";
 import {createTask} from "./controllers/tasks.js";
 import {createShoppingList} from "./controllers/shoppingList.js"
+import {createEvent} from "./controllers/events.js";
 
 
 import { verifyToken } from "./middleware/auth.js";
@@ -22,6 +23,7 @@ import userRoutes from "./routes/users.js"
 import groupRoutes from "./routes/group.js"
 import postRoutes from "./routes/posts.js"
 import taskRoutes from "./routes/tasks.js"
+import eventRoutes from "./routes/events.js";
 import shoppingListRoutes from "./routes/shoppingList.js";
 
 /* CONFIGURATION */
@@ -59,9 +61,9 @@ const storage = multer.diskStorage({
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
 app.post("/posts",verifyToken, upload.single("picture"), createPost)
-app.post("/tasks",verifyToken, upload.single("picture"), createTask)
-
-app.post("/lists",verifyToken, upload.single("picture"), createShoppingList)
+app.post("/tasks",verifyToken, createTask)
+app.post("/events",verifyToken, createEvent)
+app.post("/lists",verifyToken,  createShoppingList)
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes )
@@ -69,6 +71,7 @@ app.use("/groups", groupRoutes )
 app.use("/posts", postRoutes )
 app.use("/tasks", taskRoutes )
 app.use("/lists", shoppingListRoutes)
+app.use("/events", eventRoutes);
 
 /* MONGOOSE  SETUP*/
 const PORT = process.env.PORT || 6001;

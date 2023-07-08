@@ -4,6 +4,7 @@ import LoginPage from './scenes/loginPage';
 import ProfilePage from './scenes/profilePage';
 import TaskPage from './scenes/taskPage';
 import ShoppingListPage from './scenes/shoppingPage';
+import CalendarPage from './scenes/calendarPage';
 import './App.css';
 
 import { useMemo } from 'react';
@@ -29,6 +30,7 @@ function App() {
             <Route path="/tasks" element={ isAuth ? <TaskPage /> : <Navigate to="/"/> }/>
             <Route path="/profile/:userId" element={  isAuth ?  <ProfilePage /> : <Navigate to="/" />}/>
             <Route path="/lists" element={ isAuth ? <ShoppingListPage /> : <Navigate to="/"/>}/>
+            <Route path="/events" element={ isAuth ? <CalendarPage /> : <Navigate to="/"/>}/>
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

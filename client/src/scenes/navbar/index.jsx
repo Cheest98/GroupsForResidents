@@ -75,7 +75,7 @@ const Navbar = () => {
                             cursor: "pointer",
                         },
                     }} />
-                    <CalendarMonth sx={{
+                    <CalendarMonth onClick={() => navigate(`/events`)} sx={{
                         fontSize: "25px", "&:hover": {
                             color: neutralLight,
                             cursor: "pointer",
@@ -178,7 +178,7 @@ const Navbar = () => {
                         </FormControl>
                         <ReceiptLong onClick={() => navigate(`/lists`)} sx={{ fontSize: "25px" }} />
                         <PlaylistAddCheck onClick={() => navigate(`/tasks`)} sx={{ fontSize: "25px" }} />
-                        <CalendarMonth sx={{ fontSize: "25px" }} />
+                        <CalendarMonth onClick={() => navigate(`/events`)} sx={{ fontSize: "25px" }} />
                         <IconButton
                             onClick={() => dispatch(setMode())}
                             sx={{ fontSize: "25px" }}

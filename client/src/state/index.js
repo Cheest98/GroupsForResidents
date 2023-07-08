@@ -9,6 +9,7 @@ const initialState = {
   tasks: [],
   groups:[],
   shoppingLists: [],
+  events: [],
 };
 
 export const authSlice = createSlice({
@@ -66,14 +67,9 @@ export const authSlice = createSlice({
       });
       state.shoppingLists = updatedShoppingLists;
     },
-
-    deleteList: (state, action) => {
-      const listId = action.payload;
-      const updatedLists = state.shoppingLists.filter((list) => list._id !== listId);
-      state.shoppingLists = updatedLists;
+    setEvents: (state, action) => {
+      state.events = action.payload.events || [];
     },
-
-
   },
 });
 
@@ -90,8 +86,7 @@ export const {
   setShoppingList,
   setShoppingLists,
   updateTotalPrice,
-  deleteItem,
-  deleteList,
+  setEvents,
 } = authSlice.actions;
 
 export default authSlice.reducer;
