@@ -13,7 +13,7 @@ const CalendarPage = () => {
     const user = useSelector((state) => state.user);
 
     const getEvents = async () => {
-        const response = await fetch("http://localhost:3001/events", {
+        const response = await fetch(`http://localhost:3001/events/group/${user.group}`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` },
         });

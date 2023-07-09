@@ -28,13 +28,13 @@ export const createEvent = async (req, res) => {
     }
 };
 
-//to fix - not working 
+
 
 export const getGroupEvents = async (req, res) => {
     try {
         const { groupId } = req.params;
         
-        const events = await Event.find({ group: groupId }).populate('createdBy', 'firstName lastName');
+        const events = await Event.find({ group: groupId })
 
         res.status(200).json(events);
     } catch (error) {
@@ -42,4 +42,19 @@ export const getGroupEvents = async (req, res) => {
     }
 };
 
-//
+export const deleteEvent = async (req, res) => {
+    try {
+      const { eventId } = req.params;
+  
+      const event = await Event.findById(eventId);
+      if (!event) {
+        return res.status(404).json({ message: 'Event not found' });
+      }
+  
+      await Event.findByIdAndRemove(eventId);
+  
+      res.json({ message: 'Event deleted successfully' });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
