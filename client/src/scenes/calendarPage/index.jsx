@@ -40,7 +40,12 @@ const CalendarPage = () => {
                 </Box>
 
             </Box>
-            <Box >
+            <Box width="100%"
+                padding="2rem 6%"
+                gap="0.5rem"
+                justifyContent="space-around"
+                alignItems="center"
+            >
                 <CalendarWidget getEvents={getEvents} />
             </Box>
         </Box>

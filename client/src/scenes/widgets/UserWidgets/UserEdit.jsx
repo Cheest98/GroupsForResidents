@@ -62,6 +62,7 @@ const UserEdit = ({ user, handleCancelClick, getUser }) => {
             console.log(user);
         }
     };
+
     return (
         <WidgetWrapper m="2rem 0" width="100%">
             <Typography color={medium}>Widok Edycji</Typography>

@@ -74,46 +74,51 @@ const NewEventWidget = () => {
 
     return (
         <WidgetWrapper>
-            <Box> New Event Component
+            <Box>
                 <Box width="100%"
                     padding="1rem 6%"
                     display={isNonMobileScreens ? 'flex' : 'block'}
-                    gap="0.5rem"
+                    flexDirection="column"
+                    gap="15px"
+                    alignItems="center"
+                    justifyContent="center"
                 >
-                    <InputBase
-                        placeholder="Title"
-                        onChange={handleTitleChange}
-                        value={event.title}
-                        sx={{
-                            width: "100%",
-                            backgroundColor: palette.neutral.light,
-                            borderRadius: "2rem",
-                            padding: "1rem 2rem",
-                            mb: "0.5rem",
-                        }}
-                    />
-                    <InputBase
-                        placeholder="Description"
-                        onChange={handleDescriptionChange}
-                        value={event.description}
-                        sx={{
-                            width: "100%",
-                            backgroundColor: palette.neutral.light,
-                            borderRadius: "2rem",
-                            padding: "1rem 2rem",
-                        }}
-                    />
+                    <Box display="flex" justifyContent="space-between" width="100%">
+                        <InputBase
+                            placeholder="Title"
+                            onChange={handleTitleChange}
+                            value={event.title}
+                            sx={{
+                                width: "100%",
+                                backgroundColor: palette.neutral.light,
+                                borderRadius: "2rem",
+                                padding: "1rem 2rem",
+                            }}
+                        />
+                        <InputBase
+                            placeholder="Description"
+                            onChange={handleDescriptionChange}
+                            value={event.description}
+                            sx={{
+                                width: "100%",
+                                backgroundColor: palette.neutral.light,
+                                borderRadius: "2rem",
+                                padding: "1rem 2rem",
+                            }}
+                        />
+                    </Box>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DateTimePicker
-                            label="Start Date"
-                            value={event.startDate}
-                            onChange={handleStartDateChange}
-                        />
-                        <DateTimePicker
-                            label="End Date"
-                            value={event.EndDate}
-                            onChange={handleEndDateChange}
-                        />
+                        <Box display="flex" justifyContent="space-between" width="100%">
+                            <DateTimePicker
+                                label="Start Date"
+                                value={event.startDate}
+                                onChange={handleStartDateChange}
+                            />
+                            <DateTimePicker
+                                label="End Date"
+                                value={event.EndDate}
+                                onChange={handleEndDateChange}
+                            /></Box>
                     </LocalizationProvider>
                 </Box>
 
@@ -121,7 +126,7 @@ const NewEventWidget = () => {
 
                 <FlexBetween>
                     <Button
-                        disabled={!event.title || !event.description || !event.startDate || !event.endDate}   // Sprawdzaj oba pola
+                        disabled={!event.title || !event.description || !event.startDate || !event.endDate}
                         onClick={handleEvent}
                         sx={{
                             color: palette.background.alt,
@@ -129,7 +134,7 @@ const NewEventWidget = () => {
                             borderRadius: "3rem",
                         }}
                     >
-                        Event
+                        Add Event
                     </Button>
                 </FlexBetween>
             </Box>

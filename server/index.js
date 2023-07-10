@@ -14,7 +14,7 @@ import {createPost} from "./controllers/posts.js";
 import {createTask} from "./controllers/tasks.js";
 import {createShoppingList} from "./controllers/shoppingList.js"
 import {createEvent} from "./controllers/events.js";
-
+import {createGroup} from "./controllers/group.js";
 
 import { verifyToken } from "./middleware/auth.js";
 
@@ -64,6 +64,7 @@ app.post("/posts",verifyToken, upload.single("picture"), createPost)
 app.post("/tasks",verifyToken, createTask)
 app.post("/events",verifyToken, createEvent)
 app.post("/lists",verifyToken,  createShoppingList)
+app.post('/groups', verifyToken, createGroup);
 /* ROUTES */
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes )
