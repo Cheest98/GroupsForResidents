@@ -51,10 +51,12 @@ const NewGroupWidget = ({ handleCancelCreatingClick, getGroups, getUserGroup }) 
 
     return (
         <WidgetWrapper>
-            <Box width="100%"
-                padding="1rem 6%"
-                display={isNonMobileScreens ? 'flex' : 'block'}
-                gap="0.5rem">
+            <Box display="flex"
+                flexDirection="column"
+                gap="15px"
+                alignItems="center"
+                justifyContent="center"
+                sx={{ width: '100%' }}>
                 <InputBase
                     placeholder="Name"
                     name="name"
@@ -69,7 +71,7 @@ const NewGroupWidget = ({ handleCancelCreatingClick, getGroups, getUserGroup }) 
                     }}
                 />
                 <InputBase
-                    placeholder="password"
+                    placeholder="Password"
                     name="password"
                     onChange={handleInputChange}
                     value={newGroup.password}

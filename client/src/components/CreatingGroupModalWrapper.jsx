@@ -6,13 +6,12 @@ const CreatingGroupModalWrapper = styled(Box)(({ theme }) => ({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: "50%",
-    height: "50%",
+    width: "30%",
     padding: "1.5rem 1.5rem 0.75rem 1.5rem",
     backgroundColor: theme.palette.background.alt,
     borderRadius: "0.75rem",
     display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: "column", // this changes the main axis to vertical
+    justifyContent: "center", // now this will center vertically
 }));
 export default CreatingGroupModalWrapper;

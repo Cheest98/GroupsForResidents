@@ -183,20 +183,25 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
             <Button onClick={handleCreateClick}>Create new group</Button>
             <Modal open={selectedGroup != null} onClose={handleCloseModal}>
                 <ModalWrapper>
-                    <Box>
+                    <Box display="flex"
+                        flexDirection="column"
+                        gap="15px"
+                        alignItems="center"
+                        justifyContent="center"
+                        sx={{ width: '100%' }}>
                         <TextField
                             label="Password"
                             type="password"
                             value={password}
                             onChange={handlePasswordChange}
                             placeholder="Group Password"
-                            error={Boolean(joinGroupError)} // Show error style if there is an error
-                            helperText={joinGroupError} // Display error message
-
+                            error={Boolean(joinGroupError)}
+                            helperText={joinGroupError}
+                            fullWidth
                         />
                     </Box>
-                    <Box>
-                        <Button onClick={handleJoinClick}>Join</Button>
+                    <Box display="flex" justifyContent="center">
+                        <Button onClick={handleJoinClick} >Join</Button>
                     </Box>
                 </ModalWrapper>
             </Modal>

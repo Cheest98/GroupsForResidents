@@ -1,19 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Button, TextField, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
-import { Typography, TextField } from '@mui/material';
-import WidgetWrapper from '../WidgetWrapper';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import WidgetWrapper from '../WidgetWrapper';
 
-export const FilterCompletedLists = () => {
-    const [startDate, setStartDate] = useState(null);
-    const [endDate, setEndDate] = useState(null);
+export const FilterCompletedLists = ({ handleDelete }) => {
+    const today = new Date();
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(today.getDate() - 7);
+
+    const [startDate, setStartDate] = useState(oneWeekAgo);
+    const [endDate, setEndDate] = useState(today);
     const [totalPrice, setTotalPrice] = useState(0);
-    const [filteredLists, setFilteredLists] = useState([]);
-
     const shoppingLists = useSelector((state) => state.shoppingLists);
+
+    const [filteredLists, setFilteredLists] = useState([]);
 
     useEffect(() => {
         if (startDate && endDate) {
@@ -56,6 +60,7 @@ export const FilterCompletedLists = () => {
                             <h1>{list.name}</h1>
                             <h2>Total Price: {list.totalPrice}</h2>
                             <p>Completed at: {new Date(list.completedAt).toLocaleString()}</p>
+                            <Button variant="outlined" color="error" onClick={() => handleDelete(list._id)}>Delete</Button>
                         </Box>
                     ))}
                 </Box>

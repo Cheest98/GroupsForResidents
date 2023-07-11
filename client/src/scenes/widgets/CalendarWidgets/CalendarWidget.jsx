@@ -4,7 +4,6 @@ import {
     Box,
     Button,
     TextField,
-    useMediaQuery
 } from "@mui/material";
 import Modal from '@mui/material/Modal';
 import FullCalendar from '@fullcalendar/react';
@@ -25,7 +24,6 @@ const CalendarWidget = ({ getEvents }) => {
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [editEvent, setEditEvent] = useState(false)
     const [currentEvent, setCurrentEvent] = useState({ title: '', description: '', startDate: null, endDate: null });
-    const isNonMobile = useMediaQuery("(min-width:600px)");
 
     useEffect(() => {
         getEvents();
@@ -83,7 +81,7 @@ const CalendarWidget = ({ getEvents }) => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             } else {
-                const updatedEvent = await response.json(); // assuming response is the updated event
+                const updatedEvent = await response.json();
                 const updatedEvents = events.map((event) => event._id === updatedEvent._id ? updatedEvent : event);
                 dispatch(setEvents({ events: updatedEvents }));
             }
@@ -94,7 +92,7 @@ const CalendarWidget = ({ getEvents }) => {
 
     const handleEditEventClick = (info) => {
         setSelectedEvent(info.event);
-        setCurrentEvent({ // fill the form with the current details of the event
+        setCurrentEvent({
             title: info.event.title,
             description: info.event.extendedProps.description,
             startDate: new Date(info.event.start),

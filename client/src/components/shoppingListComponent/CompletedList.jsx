@@ -3,7 +3,7 @@ import React from 'react';
 import TaskWrapper from '../tasksComponents/TaskWrapper';
 
 
-export const CompletedList = ({ list, handleDelete, addItemToList }) => {
+export const CompletedList = ({ list, handleDelete }) => {
 
     return (
         <TaskWrapper sx={{ border: '1px dashed grey', mb: '1rem' }}>

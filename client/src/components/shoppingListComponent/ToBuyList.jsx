@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import TaskWrapper from '../tasksComponents/TaskWrapper';
-import { Button, TextField, Box, Divider, List, ListItem, Typography } from '@mui/material';
-import { AddCircle, Cancel } from "@mui/icons-material"
+import { AddCircle, Cancel } from "@mui/icons-material";
+import CancelIcon from '@mui/icons-material/Cancel';
+import { Avatar, Box, Button, Divider, IconButton, List, ListItem, ListItemAvatar, ListItemText, TextField } from '@mui/material';
 import { green } from '@mui/material/colors';
-
+import React, { useState } from 'react';
+import TaskWrapper from '../tasksComponents/TaskWrapper';
 
 export const ToBuyList = ({ list, handleDelete, handleComplete, addItemToList, removeItemFromList }) => {
 
@@ -38,18 +38,21 @@ export const ToBuyList = ({ list, handleDelete, handleComplete, addItemToList, r
         setNewItem({ name: '', quantity: 0 }); // Reset the item input fields
     };
     return (
-        <TaskWrapper>
+        <Box>
             <Box>
                 <h1>{list.name}</h1>
                 <List>
-                    {list.items.map((item, index) => (
+                    {list.items.map((item, index) =>
                         <ListItem key={index}>
-                            <Typography variant="body1">
-                                {item.name} - {item.quantity}
-                            </Typography>
-                            <Cancel variant="outlined" color="error" onClick={() => removeItemFromList(list._id, item._id)} />
+                            <ListItemAvatar>
+                                <Avatar>{item.name[0]}</Avatar>
+                            </ListItemAvatar>
+                            <ListItemText primary={item.name} secondary={`Quantity: ${item.quantity}`} />
+                            <IconButton edge="end" onClick={() => removeItemFromList(list._id, item._id)}>
+                                <CancelIcon />
+                            </IconButton>
                         </ListItem>
-                    ))}
+                    )}
                 </List>
                 {
                     addingItem
@@ -100,7 +103,7 @@ export const ToBuyList = ({ list, handleDelete, handleComplete, addItemToList, r
                 </Box>
             </Box>
 
-        </TaskWrapper >
+        </Box>
     )
 }
 
