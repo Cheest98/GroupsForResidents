@@ -1,7 +1,7 @@
 import { Box, useMediaQuery } from '@mui/material';
+import React from 'react';
+import FilterCompletedLists from "./FilterCompletedLists";
 import ShoppingRow from "./ShoppingRow";
-import FilterCompletedLists from "./FilterCompletedLists"
-import React, { useState } from 'react'
 
 const ShoppingList = ({ shoppingLists, deleteShoppingList, completeShoppingList, addItemToList, removeItemFromList }) => {
     const todoLists = shoppingLists.filter((list) => list.completed === false);

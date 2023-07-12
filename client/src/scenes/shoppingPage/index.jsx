@@ -43,9 +43,8 @@ const ShoppingListPage = () => {
                 >
                     <NewListWidget getGroupShoppingList={getGroupShoppingList} />
                 </Box>
-            </Box>
+            </Box >
             <ShoppinglistWidget getGroupShoppingList={getGroupShoppingList} />
-            <FilterCompletedLists />
         </Box>
     );
 };
