@@ -1,10 +1,10 @@
-import { Button, TextField, Typography } from '@mui/material';
-import Box from '@mui/material/Box';
+import { Avatar, Box, Button, Grid, List, ListItem, ListItemAvatar, ListItemText, TextField, Typography } from '@mui/material';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import ShoppingStatus from '../ShoppingStatus';
 import WidgetWrapper from '../WidgetWrapper';
 
 export const FilterCompletedLists = ({ handleDelete }) => {
@@ -19,6 +19,12 @@ export const FilterCompletedLists = ({ handleDelete }) => {
 
     const [filteredLists, setFilteredLists] = useState([]);
 
+    const [displayedListsCount, setDisplayedListsCount] = useState();
+
+    const handleLoadMore = () => {
+        setDisplayedListsCount(prevCount => prevCount + 6);
+    }
+
     useEffect(() => {
         if (startDate && endDate) {
             const startDateMidnight = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
@@ -29,6 +35,7 @@ export const FilterCompletedLists = ({ handleDelete }) => {
                 return list.completed && listDate >= startDateMidnight && listDate <= endDateMidnight;
             });
 
+
             setFilteredLists(lists);
 
             const price = lists.reduce((total, list) => total + list.totalPrice, 0);
@@ -38,9 +45,9 @@ export const FilterCompletedLists = ({ handleDelete }) => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <WidgetWrapper>
-                <Box>
-                    <Typography variant="h6">Filter by date range:</Typography>
+            <Box>
+                <ShoppingStatus
+                    mb="0.5rem">
                     <DatePicker
                         label="Start Date"
                         value={startDate}
@@ -53,19 +60,46 @@ export const FilterCompletedLists = ({ handleDelete }) => {
                         onChange={(date) => setEndDate(date)}
                         renderInput={(params) => <TextField {...params} />}
                     />
+
                     <Typography variant="h6">Total Price: {totalPrice}</Typography>
-                    {/* Render the filtered lists */}
-                    {filteredLists.map((list) => (
-                        <Box key={list._id}>
-                            <h1>{list.name}</h1>
-                            <h2>Total Price: {list.totalPrice}</h2>
-                            <p>Completed at: {new Date(list.completedAt).toLocaleString()}</p>
-                            <Button variant="outlined" color="error" onClick={() => handleDelete(list._id)}>Delete</Button>
-                        </Box>
+                </ShoppingStatus>
+                {/* Render the filtered lists */}
+                <Grid container spacing={3}>
+                    {filteredLists.slice(0, displayedListsCount).map((list) => (
+                        <Grid item xs={12} sm={6} key={list._id}>
+                            <WidgetWrapper>
+                                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                    <Box flex={1}><h1 style={{ textAlign: 'center' }}>{list.name}</h1></Box>
+                                    <Box flex={1} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+
+                                        <Typography variant="body2">Completed at:</Typography>
+                                        <Typography variant="body2">{new Date(list.completedAt).toLocaleString()}</Typography>
+                                    </Box>
+
+                                </Box>
+                                <List sx={{ minHeight: '12rem', maxHeight: '12rem', overflowY: 'auto' }}>
+                                    {list.items.map((item, index) =>
+                                        <ListItem key={index}>
+                                            <ListItemAvatar>
+                                                <Avatar>{item.name[0]}</Avatar>
+                                            </ListItemAvatar>
+                                            <ListItemText primary={item.name} secondary={`Quantity: ${item.quantity}`} />
+                                        </ListItem>
+                                    )}
+                                </List>
+                                <h2>Total Price: {list.totalPrice}</h2>
+                                <Button variant="outlined" color="error" onClick={() => handleDelete(list._id)}>Delete</Button>
+                            </WidgetWrapper>
+                        </Grid>
                     ))}
-                </Box>
-            </WidgetWrapper>
-        </LocalizationProvider>
+                </Grid>
+                {
+                    displayedListsCount < shoppingLists.length && (
+                        <Button onClick={handleLoadMore}>More Lists</Button>
+                    )
+                }
+            </Box>
+        </LocalizationProvider >
     );
 };
 

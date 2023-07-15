@@ -1,4 +1,3 @@
-import { Cancel } from "@mui/icons-material";
 import CancelIcon from '@mui/icons-material/Cancel';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Avatar, Box, Button, IconButton, List, ListItem, ListItemAvatar, ListItemText, TextField, useTheme } from '@mui/material';

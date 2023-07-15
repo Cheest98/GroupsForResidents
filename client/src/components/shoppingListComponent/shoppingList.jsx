@@ -7,6 +7,11 @@ const ShoppingList = ({ shoppingLists, deleteShoppingList, completeShoppingList,
     const todoLists = shoppingLists.filter((list) => list.completed === false);
     const isNonMobileScreens = useMediaQuery('(min-width:1000px)');
 
+
+    const handleDelete = (listId) => {
+        deleteShoppingList(listId);
+    }
+
     return (
 
         <Box
@@ -19,13 +24,13 @@ const ShoppingList = ({ shoppingLists, deleteShoppingList, completeShoppingList,
                 <ShoppingRow
                     shoppingLists={todoLists}
                     status="To Buy"
-                    deleteShoppingList={deleteShoppingList}
+                    handleDelete={handleDelete}
                     completeShoppingList={completeShoppingList}
                     addItemToList={addItemToList}
                     removeItemFromList={removeItemFromList} />
             </Box>
             <Box flexBasis={isNonMobileScreens ? '50%' : undefined}>
-                <FilterCompletedLists deleteShoppingList={deleteShoppingList} />
+                <FilterCompletedLists handleDelete={handleDelete} />
             </Box>
         </Box>
 

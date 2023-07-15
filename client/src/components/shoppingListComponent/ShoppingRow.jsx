@@ -3,7 +3,7 @@ import { Box, Grid, Button } from '@mui/material';
 import ShoppingSingleList from "./ShoppingSingleList";
 import ShoppingStatus from '../ShoppingStatus';
 
-const ShoppingRow = ({ shoppingLists, status, deleteShoppingList, completeShoppingList, addItemToList, removeItemFromList }) => {
+const ShoppingRow = ({ shoppingLists, status, handleDelete, completeShoppingList, addItemToList, removeItemFromList }) => {
     const [displayedListsCount, setDisplayedListsCount] = useState(6);
 
     const handleLoadMore = () => {
@@ -21,7 +21,7 @@ const ShoppingRow = ({ shoppingLists, status, deleteShoppingList, completeShoppi
                     <Grid item xs={12} sm={6} key={list._id}>
                         <ShoppingSingleList
                             list={list}
-                            deleteShoppingList={deleteShoppingList}
+                            handleDelete={handleDelete}
                             completeShoppingList={completeShoppingList}
                             addItemToList={addItemToList}
                             removeItemFromList={removeItemFromList}
