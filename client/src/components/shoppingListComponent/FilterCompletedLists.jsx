@@ -19,7 +19,7 @@ export const FilterCompletedLists = ({ handleDelete }) => {
 
     const [filteredLists, setFilteredLists] = useState([]);
 
-    const [displayedListsCount, setDisplayedListsCount] = useState();
+    const [displayedListsCount, setDisplayedListsCount] = useState(6);
 
     const handleLoadMore = () => {
         setDisplayedListsCount(prevCount => prevCount + 6);
@@ -47,21 +47,28 @@ export const FilterCompletedLists = ({ handleDelete }) => {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <Box>
                 <ShoppingStatus
-                    mb="0.5rem">
-                    <DatePicker
-                        label="Start Date"
-                        value={startDate}
-                        onChange={(date) => setStartDate(date)}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
-                    <DatePicker
-                        label="End Date"
-                        value={endDate}
-                        onChange={(date) => setEndDate(date)}
-                        renderInput={(params) => <TextField {...params} />}
-                    />
-
-                    <Typography variant="h6">Total Price: {totalPrice}</Typography>
+                    mb="0.5rem"
+                    mt="0.5rem">
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Box flex={2}>
+                            <DatePicker
+                                label="Start Date"
+                                value={startDate}
+                                onChange={(date) => setStartDate(date)}
+                                renderInput={(params) => <TextField {...params} />}
+                            /> </Box>
+                        <Box flex={2}>
+                            <DatePicker
+                                label="End Date"
+                                value={endDate}
+                                onChange={(date) => setEndDate(date)}
+                                renderInput={(params) => <TextField {...params} />}
+                            /></Box>
+                        <Box flex={1} style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+                            <Typography variant="h6">Total Price</Typography>
+                            <Typography variant="h6">{totalPrice}</Typography>
+                        </Box>
+                    </Box>
                 </ShoppingStatus>
                 {/* Render the filtered lists */}
                 <Grid container spacing={3}>
@@ -94,7 +101,7 @@ export const FilterCompletedLists = ({ handleDelete }) => {
                     ))}
                 </Grid>
                 {
-                    displayedListsCount < shoppingLists.length && (
+                    displayedListsCount < filteredLists.length && (
                         <Button onClick={handleLoadMore}>More Lists</Button>
                     )
                 }

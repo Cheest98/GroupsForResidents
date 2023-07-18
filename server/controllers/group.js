@@ -54,6 +54,7 @@ export const createGroup = async (req, res) => {
       .json({ message: 'Failed to create group' });
   }
 };
+
 export const addUserToGroup = async (req, res) => {
   const { body: { userId, password }, params: { groupId } } = req;
   try {

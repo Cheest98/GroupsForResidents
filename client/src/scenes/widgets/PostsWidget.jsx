@@ -3,43 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "../../state";
 import PostWidget from "../widgets/PostWidget";
 
-const PostsWidget = ({ userId, isProfile = false }) => {
+const PostsWidget = ({ getPosts, userId, isProfile = false }) => {
     const dispatch = useDispatch();
     const posts = useSelector((state) => state.posts);
     const token = useSelector((state) => state.token);
     const user = useSelector((state) => state.user);
 
-    const getGroupPosts = async () => {
-        const response = await fetch(
-            `http://localhost:3001/posts/group/${user.group}`,
-            {
-                method: "GET",
-                headers: { Authorization: `Bearer ${token}` },
-            }
-        );
-        const data = await response.json();
-        dispatch(setPosts({ posts: data }));
-    };
-
-    const getUserPosts = async () => {
-        const response = await fetch(
-            `http://localhost:3001/posts/${userId}/posts`,
-            {
-                method: "GET",
-                headers: { Authorization: `Bearer ${token}` },
-            }
-        );
-        const data = await response.json();
-        dispatch(setPosts({ posts: data }));
-    };
-
     useEffect(() => {
-        if (isProfile) {
-            getUserPosts();
-        } else {
-            getGroupPosts();
-        }
-    }, [user.group]); // eslint-disable-line react-hooks/exhaustive-deps
+        getPosts();
+    }, [getPosts]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const sortedPosts = Array.isArray(posts)
         ? [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))

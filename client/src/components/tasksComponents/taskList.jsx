@@ -8,6 +8,10 @@ const TaskList = ({ tasks, deleteTask, updateTaskStatus }) => {
     const doneTasks = tasks.filter((task) => task.status === 'done');
     const isNonMobileScreens = useMediaQuery('(min-width:1000px)');
 
+    // if (!tasks || tasks.length === 0) {
+    //    return <p>No tasks available</p>;
+    // }
+
     return (
         <Box
             width="100%"

@@ -52,17 +52,8 @@ export const updateTaskStatus = async (req, res) => {
 
 export const getFeedTasks = async (req, res) => {
   try {
-    const tasks = await Task.find();
-    res.status(200).json(tasks);
-  } catch (err) {
-    res.status(404).json({ message: err.message });
-  }
-};
-
-export const getUserTasks = async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const tasks = await Task.find({ user: userId });
+    const { groupId } = req.params;
+    const tasks = await Task.find( { group: groupId });
     res.status(200).json(tasks);
   } catch (err) {
     res.status(404).json({ message: err.message });

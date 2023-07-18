@@ -12,28 +12,39 @@ import FlexBetween from "../../components/FlexBetween";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { setTasks } from "../../state";
 
-const MyTaskWidget = () => {
+const NewTaskWidget = ({ getTasks }) => {
     const dispatch = useDispatch();
     const [task, setTask] = useState({ title: '', description: '' });
     const { palette } = useTheme();
+    const currentTasks = useSelector((state) => state.tasks);
     const { _id } = useSelector((state) => state.user);
     const token = useSelector((state) => state.token);
     const isNonMobileScreens = useMediaQuery('(min-width:1000px)');
 
     const handleTask = async () => {
-        const formData = new FormData();
-        formData.append("userId", _id);
-        formData.append("title", task.title);
-        formData.append("description", task.description);
 
         const response = await fetch(`http://localhost:3001/tasks`, {
             method: "POST",
-            headers: { Authorization: `Bearer ${token}` },
-            body: formData,
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: _id,
+                title: task.title,
+                description: task.description
+            }),
         });
-        const tasks = await response.json();
-        dispatch(setTasks({ tasks }));
+        if (!response.ok) {
+            console.error('Server responded with status', response.status);
+            return;
+        }
+        const newList = await response.json();
+
+        const updatedTasks = [...currentTasks, newList];
+        dispatch(setTasks({ tasks: updatedTasks }));
         setTask({ title: '', description: '' }); // Resetuj wartości title i description
+        getTasks();
     };
 
     const handleTitleChange = (e) => {
@@ -60,7 +71,7 @@ const MyTaskWidget = () => {
                         backgroundColor: palette.neutral.light,
                         borderRadius: "2rem",
                         padding: "1rem 2rem",
-                        mb: "0.5rem",
+
                     }}
                 />
                 <InputBase
@@ -95,4 +106,4 @@ const MyTaskWidget = () => {
     );
 };
 
-export default MyTaskWidget;
+export default NewTaskWidget;

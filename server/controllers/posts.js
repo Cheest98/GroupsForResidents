@@ -33,31 +33,12 @@ export const  createPost = async (req, res) => {
 };
 
 /* READ */
-export const getFeedPosts = async (req, res) => {
-  try {
-    const post = await Post.find();
-    res.status(200).json(post);
-  } catch (err) {
-    res.status(404).json({ message: err.message });
-  }
-};
-
-export const getPostsByGroup = async (req, res) => {
+export const getPosts = async (req, res) => {
   try {
       const { groupId } = req.params;
-      const posts = await Post.find({ group: groupId }); // assuming you have group field in Post model
+      const posts = await Post.find({ group: groupId });
       res.json(posts);
   } catch (err) {
       res.status(500).json({ message: err.message });
-  }
-};
-
-export const getUserPosts = async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const post = await Post.find({user: userId });
-    res.status(200).json(post);
-  } catch (err) {
-    res.status(404).json({ message: err.message });
   }
 };

@@ -11,9 +11,10 @@ const ShoppingRow = ({ shoppingLists, status, handleDelete, completeShoppingList
     }
 
     return (
-        <Box>
+        <Box >
             <ShoppingStatus
-                mb="0.5rem">
+                mb="0.5rem"
+                mt="0.5rem">
                 <h2>{status}</h2>
             </ShoppingStatus>
             <Grid container spacing={3}>
