@@ -1,11 +1,9 @@
 import { Box, useMediaQuery } from "@mui/material";
+import { useDispatch, useSelector } from 'react-redux';
 import Navbar from "../../scenes/navbar";
-import ShoppinglistWidget from "../widgets/ShoppingListWidgets/ShoppingListWidget"
-import NewListWidget from "../widgets/ShoppingListWidgets/NewListWidget"
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { setShoppingLists } from '../../state/index';
-import FilterCompletedLists from "../../components/shoppingListComponent/FilterCompletedLists"
+import NewListWidget from "../widgets/ShoppingListWidgets/NewListWidget";
+import ShoppinglistWidget from "../widgets/ShoppingListWidgets/ShoppingListWidget";
 
 const ShoppingListPage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");

@@ -1,35 +1,78 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setPosts } from "../../state";
+import React, { useState, useEffect } from 'react';
+import { useSelector } from "react-redux";
 import PostWidget from "../widgets/PostWidget";
+import { Button, Skeleton } from '@mui/material';
 
-const PostsWidget = ({ getPosts, userId, isProfile = false }) => {
-    const dispatch = useDispatch();
+const PostsWidget = ({ getPosts }) => {
     const posts = useSelector((state) => state.posts);
-    const token = useSelector((state) => state.token);
-    const user = useSelector((state) => state.user);
+    const [loading, setLoading] = useState(true);
+
+    const [displayedPostCount, setDisplayedPostCount] = useState(5);
+
+    const handleLoadMore = () => {
+        setDisplayedPostCount((prevCount) => prevCount + 6);
+    };
 
     useEffect(() => {
-        getPosts();
-    }, [getPosts]); // eslint-disable-line react-hooks/exhaustive-deps
+        const fetchPosts = async () => {
+            setLoading(true);
+            await getPosts();
+            setLoading(false);
+        };
+
+        fetchPosts();
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     const sortedPosts = Array.isArray(posts)
-        ? [...posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        ? [...posts].sort(
+            (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        )
         : [];
 
     return (
         <>
-            {sortedPosts.map(({ _id, user, userFirstName, userLastName, description, picturePath, userPicturePath }) => (
-                <PostWidget
-                    key={_id}
-                    postId={_id}
-                    postUserId={user}
-                    name={`${userFirstName} ${userLastName}`}
-                    description={description}
-                    picturePath={picturePath}
-                    userPicturePath={userPicturePath}
-                />
-            ))}
+            {loading ? (
+                <>
+                    <Skeleton
+                        variant="rectangular"
+                        width="100%"
+                        height={200}
+                        sx={{
+                            padding: "0.75rem 1.5rem 0.75rem 1.5rem",
+                            mt: "1rem",
+                            borderRadius: "0.75rem",
+                        }}
+                    />
+                    <Skeleton
+                        variant="rectangular"
+                        width="100%"
+                        height={200}
+                        sx={{
+                            padding: "0.75rem 1.5rem 0.75rem 1.5rem",
+                            mt: "1rem",
+                            borderRadius: "0.75rem",
+                        }}
+                    />
+                </>
+            ) : (
+                sortedPosts.slice(0, displayedPostCount).map(
+                    ({ _id, user, userFirstName, userLastName, description, picturePath }) => (
+
+                        <PostWidget
+                            postId={_id}
+                            postUserId={user}
+                            userFirstName={userFirstName}
+                            userLastName={userLastName}
+                            description={description}
+                            picturePath={picturePath}
+                            userPicturePath={user.picturePath}
+                        />
+                    )
+                )
+            )}
+            {displayedPostCount < sortedPosts.length && (
+                <Button onClick={handleLoadMore}>More Posts</Button>
+            )}
         </>
     );
 };

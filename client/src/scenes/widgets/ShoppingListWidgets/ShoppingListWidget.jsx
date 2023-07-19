@@ -5,7 +5,7 @@ import { setShoppingLists } from "../../../state/index";
 
 const ShoppingListWidget = ({ getGroupShoppingList }) => {
     const dispatch = useDispatch();
-    const shoppingLists = useSelector((state) => state.shoppingLists);
+    const shoppingLists = useSelector((state) => Array.isArray(state.shoppingLists) ? state.shoppingLists : []);
     const token = useSelector((state) => state.token);
     const user = useSelector((state) => state.user);
 

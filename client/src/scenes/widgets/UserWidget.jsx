@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
+import { Skeleton } from '@mui/material';
 import UserEdit from "../widgets/UserWidgets/UserEdit";
 import UserView from "../widgets/UserWidgets/UserView";
 
@@ -9,6 +9,7 @@ const UserWidget = ({ userId }) => {
     const { group } = useSelector((state) => state.user);
     const [editing, setEditing] = useState(false);
     const token = useSelector((state) => state.token);
+    const [loading, setLoading] = useState(true);
 
     const getUser = async () => {
         const response = await fetch(`http://localhost:3001/users/${userId}`, {
@@ -20,10 +21,19 @@ const UserWidget = ({ userId }) => {
     };
 
     useEffect(() => {
-        getUser();
-    }, [group]); // eslint-disable-line react-hooks/exhaustive-deps
+        const fetchUser = async () => {
+            setLoading(true);
+            await getUser();
+            setLoading(false);
+        };
 
-    // to się pewnie da w jednego handlera - do sprwadzenia w przyszlosci
+        fetchUser();
+    }, [group]);
+
+    //useEffect(() => {
+    // getUser();
+    //}, [group]); // eslint-disable-line react-hooks/exhaustive-deps
+
     const handleCancelClick = () => {
         setEditing(false);
     };
@@ -42,7 +52,24 @@ const UserWidget = ({ userId }) => {
     }
 
     return (
-        <UserView user={user.user} picturePath={user.picturePath} handleEditClick={handleEditClick} />);
+        <>
+            {loading ? (
+                <>
+                    <Skeleton
+                        variant="rectangular"
+                        width="100%"
+                        height={200}
+                        sx={{
+                            padding: "0.75rem 1.5rem 0.75rem 1.5rem",
+                            mt: "1rem",
+                            borderRadius: "0.75rem",
+                        }}
+                    />
+                </>
+            ) : (
+                <UserView user={user.user} picturePath={user.picturePath} handleEditClick={handleEditClick} />)}
+        </>
+    );
 
 }
 

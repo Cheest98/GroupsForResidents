@@ -20,17 +20,20 @@ import UserImage from "../../components/UserImage";
 import WidgetWrapper from "../../components/WidgetWrapper";
 import { setPosts } from "../../state";
 
-const NewPostWidget = ({ picturePath }) => {
+
+
+const NewPostWidget = ({ picturePath, getPosts }) => {
     const dispatch = useDispatch();
     const [isImage, setIsImage] = useState(false);
     const [image, setImage] = useState(null);
     const [newPost, setNewPost] = useState("");
     const { palette } = useTheme(0);
-    const { _id } = useSelector((state) => state.user);
+    const userData = useSelector((state) => state.user);
+    const { _id, picturePath: userPicturePath } = userData || {};
     const token = useSelector((state) => state.token);
+    const currentPosts = useSelector((state) => state.posts);
     const mediumMain = palette.neutral.mediumMain;
     const medium = palette.neutral.medium;
-
 
     const handlePost = async () => {
         const formData = new FormData();
@@ -47,17 +50,21 @@ const NewPostWidget = ({ picturePath }) => {
             body: formData,
         });
 
-        const postsInGroup = await response.json();
+        if (response.ok) {
+            const data = await response.json();
 
-        dispatch(setPosts({ posts: postsInGroup }));
-        setImage(null);
-        setNewPost("");
+            const updatedPosts = [...currentPosts, data];
+            dispatch(setPosts({ posts: updatedPosts }));
+            setImage(null);
+            setNewPost("");
+            getPosts();
+        }
     };
 
     return (
         <WidgetWrapper>
             <FlexBetween gap="1.5rem">
-                <UserImage image={picturePath} />
+                <UserImage image={userPicturePath} />
                 <InputBase
                     placeholder="What's on your mind..."
                     onChange={(e) => setNewPost(e.target.value)}

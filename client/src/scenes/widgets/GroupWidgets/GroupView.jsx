@@ -1,4 +1,4 @@
-import { Box, Button, Divider, TextField, Typography, useTheme } from "@mui/material";
+import { Box, Button, Divider, TextField, Typography, useTheme, Skeleton } from "@mui/material";
 import Modal from '@mui/material/Modal';
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import ModalWrapper from "../../../components/ModalWrapper";
 import WidgetWrapper from "../../../components/WidgetWrapper";
 import { setGroups, setUser } from "../../../state";
 import NewGroupWidget from "./NewGroupWidget";
+
 
 const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
     const user = useSelector((state) => state.user);
@@ -19,7 +20,7 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
     const [deletePassword, setDeletePassword] = useState('');
     const [joinGroupError, setJoinGroupError] = useState('');
     const [deletePasswordError, setDeletePasswordError] = useState('');
-
+    const [loading, setLoading] = useState(true);
 
     const { palette } = useTheme();
     const dark = palette.neutral.dark;
@@ -134,7 +135,7 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
         setCreating(false);
     };
 
-    // need to optymalize rendering groupwidget after changing group
+
     return (
         <WidgetWrapper m="2rem 0" width="100%">
             <Typography fontSize="1rem" color={main} fontWeight="500" mb="1rem">
@@ -148,7 +149,7 @@ const GroupView = ({ userGroup, groups, getUserGroup, getGroups, }) => {
                         value={deletePassword}
                         onChange={handleDeleteChange}
                         placeholder="Group Password to Delete"
-                        error={Boolean(deletePasswordError)} // Show error style if there is an error
+                        error={Boolean(deletePasswordError)}
                         helperText={deletePasswordError} />
                     <Button onClick={handleDeleteClick}>Delete Group</Button>
                 </Box>

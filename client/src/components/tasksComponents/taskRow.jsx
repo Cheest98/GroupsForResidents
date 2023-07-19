@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import TaskItem from './TaskItem';
-import WidgetWrapper from '../WidgetWrapper';
 import { Box, Button } from '@mui/material';
 
 import ShoppingStatus from '../ShoppingStatus';
@@ -27,7 +26,7 @@ const TaskRow = ({ tasks, status, deleteTask, updateTaskStatus }) => {
             </Box>
             {
                 displayedTaskCount < tasks.length && (
-                    <Button onClick={handleLoadMore}>More Lists</Button>
+                    <Button onClick={handleLoadMore}>More Tasks</Button>
                 )
             }
         </Box>

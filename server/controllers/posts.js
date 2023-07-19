@@ -35,10 +35,13 @@ export const  createPost = async (req, res) => {
 /* READ */
 export const getPosts = async (req, res) => {
   try {
-      const { groupId } = req.params;
-      const posts = await Post.find({ group: groupId });
-      res.json(posts);
+    const { groupId } = req.params;
+    const posts = await Post.find({ group: groupId })
+    .populate('user', 'firstName lastName picturePath')
+    .exec();
+
+    res.json(posts);
   } catch (err) {
-      res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 };

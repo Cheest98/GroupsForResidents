@@ -12,6 +12,7 @@ const UserView = ({ user, picturePath, handleEditClick }) => {
     const medium = palette.neutral.medium;
     const main = palette.neutral.main;
     const isNonMobile = useMediaQuery("(min-width:600px)");
+
     return (
         <WidgetWrapper m="2rem 0" width="100%">
             <FlexBetween gap="1rem" m="1rem 0">

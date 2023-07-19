@@ -7,10 +7,9 @@ import { setPosts } from "../../state";
 
 const HomePage = () => {
     const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-    const { picturePath, group } = useSelector(({ user }) => user);;
-
+    const userData = useSelector((state) => state.user);
+    const { picturePath: userPicturePath } = userData || {};
     const dispatch = useDispatch();
-    const posts = useSelector((state) => state.posts);
     const token = useSelector((state) => state.token);
     const user = useSelector((state) => state.user);
 
@@ -38,7 +37,7 @@ const HomePage = () => {
                     flexBasis={isNonMobileScreens && "42%"}
                     mt={!isNonMobileScreens && "2rem"}
                 >
-                    <MyPostWidget getPosts={getPosts} picturePath={picturePath} />
+                    <MyPostWidget getPosts={getPosts} picturePath={userPicturePath} />
                 </Box>
                 <Box width="100%"
                     p="1rem 20%"
