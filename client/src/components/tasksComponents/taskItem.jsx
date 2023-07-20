@@ -37,7 +37,7 @@ const TaskItem = ({ task, deleteTask, updateTaskStatus }) => {
     };
 
     return (
-        <TaskWrapper sx={{ border: '1px dashed grey', mb: '1rem' }}>
+        <TaskWrapper sx={{ mb: '1rem' }}>
             <h1>{task.title}</h1>
             <p>{task.description}</p>
             <Button variant="outlined" color="error" onClick={handleDelete}>Delete</Button>

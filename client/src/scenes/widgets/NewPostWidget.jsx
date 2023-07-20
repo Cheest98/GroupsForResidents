@@ -52,6 +52,12 @@ const NewPostWidget = ({ picturePath, getPosts }) => {
 
         if (response.ok) {
             const data = await response.json();
+            data.user = {
+                _id: userData._id,
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                picturePath: userData.picturePath,
+            };
 
             const updatedPosts = [...currentPosts, data];
             dispatch(setPosts({ posts: updatedPosts }));
