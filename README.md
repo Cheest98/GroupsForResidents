@@ -1,6 +1,6 @@
 # GroupsForResidents
 
-GroupsForResidents is a full-stack JavaScript application designed to facilitate group activities for residents. It provides a platform for users to create groups, manage tasks, share posts, and organize events.
+GroupsForResidents is a full MERN app designed to make it easier for residents to communicate with their roommates. It provides users with a platform to create groups, manage tasks, share posts, create a shopping list, and organize events.
 
 ## Table of Contents
 
